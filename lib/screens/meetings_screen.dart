@@ -17,7 +17,10 @@ class _MeetingScreenState extends State<MeetingScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Meetings',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w500)),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
@@ -141,16 +144,19 @@ class MeetingsScreen extends StatelessWidget {
           children: [
             Column(
               children: [
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                      color: const Color(0xFFFF7432),
-                      borderRadius: BorderRadius.circular(19)),
-                  child: const Icon(
-                    CupertinoIcons.video_camera_solid,
-                    size: 40,
-                    color: Colors.white,
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, '/new_meeting'),
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                        color: const Color(0xFFFF7432),
+                        borderRadius: BorderRadius.circular(19)),
+                    child: const Icon(
+                      CupertinoIcons.video_camera_solid,
+                      size: 40,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
                 const SizedBox(
