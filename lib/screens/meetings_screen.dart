@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class MeetingScreen extends StatefulWidget {
+  const MeetingScreen({super.key});
+
   @override
   _MeetingScreenState createState() => _MeetingScreenState();
 }
@@ -117,7 +120,7 @@ class MeetingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return Column(mainAxisSize: MainAxisSize.max, children: [
       Container(
         width: double.infinity,
         height: 126,
@@ -234,6 +237,27 @@ class MeetingsScreen extends StatelessWidget {
             )
           ],
         ),
+      ),
+      Expanded(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/calendar_big_icon.png',
+                width: 140,
+                height: 140,
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'No Upcoming Meetings',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const Text(
+                'The scheduled meetings will be listed here',
+                style: TextStyle(fontSize: 12, color: Color(0xFF6E6E6E)),
+              )
+            ]),
       )
     ]);
   }
