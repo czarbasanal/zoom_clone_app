@@ -99,6 +99,52 @@ class MeetingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: []);
+    return Column(children: [
+      Container(
+        width: double.infinity,
+        height: 130,
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: const Color(0xFFFAFAFA),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.15),
+              spreadRadius: 1,
+              blurRadius: 2,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          children: [
+            Column(
+              children: [
+                Container(
+                  width: 65,
+                  height: 65,
+                  decoration: BoxDecoration(
+                      color: const Color(0xFFFF7432),
+                      borderRadius: BorderRadius.circular(22)),
+                  child: const Icon(
+                    CupertinoIcons.video_camera_solid,
+                    size: 45,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                const Text('New Meeting',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF6E6E6E),
+                    ))
+              ],
+            )
+          ],
+        ),
+      )
+    ]);
   }
 }
