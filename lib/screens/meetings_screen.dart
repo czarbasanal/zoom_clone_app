@@ -24,7 +24,7 @@ class _MeetingScreenState extends State<MeetingScreen> {
             icon: const Icon(
               CupertinoIcons.info_circle,
               color: Colors.white,
-              size: 30,
+              size: 26,
             ),
             onPressed: () {},
           ),
@@ -123,8 +123,8 @@ class MeetingsScreen extends StatelessWidget {
     return Column(mainAxisSize: MainAxisSize.max, children: [
       Container(
         width: double.infinity,
-        height: 126,
-        padding: const EdgeInsets.all(18),
+        height: 106,
+        padding: const EdgeInsets.fromLTRB(14, 14, 14, 4),
         decoration: BoxDecoration(
           color: const Color(0xFFFAFAFA),
           boxShadow: [
@@ -142,19 +142,19 @@ class MeetingsScreen extends StatelessWidget {
             Column(
               children: [
                 Container(
-                  width: 65,
-                  height: 65,
+                  width: 60,
+                  height: 60,
                   decoration: BoxDecoration(
                       color: const Color(0xFFFF7432),
-                      borderRadius: BorderRadius.circular(22)),
+                      borderRadius: BorderRadius.circular(19)),
                   child: const Icon(
                     CupertinoIcons.video_camera_solid,
-                    size: 45,
+                    size: 40,
                     color: Colors.white,
                   ),
                 ),
                 const SizedBox(
-                  height: 8,
+                  height: 6,
                 ),
                 const Text('New Meeting',
                     style: TextStyle(
@@ -166,19 +166,19 @@ class MeetingsScreen extends StatelessWidget {
             Column(
               children: [
                 Container(
-                  width: 65,
-                  height: 65,
+                  width: 60,
+                  height: 60,
                   decoration: BoxDecoration(
                       color: const Color(0xFF1072ED),
-                      borderRadius: BorderRadius.circular(22)),
+                      borderRadius: BorderRadius.circular(19)),
                   child: const Icon(
                     CupertinoIcons.plus_square_fill,
-                    size: 32,
+                    size: 28,
                     color: Colors.white,
                   ),
                 ),
                 const SizedBox(
-                  height: 8,
+                  height: 6,
                 ),
                 const Text('Join',
                     style: TextStyle(
@@ -190,19 +190,19 @@ class MeetingsScreen extends StatelessWidget {
             Column(
               children: [
                 Container(
-                  width: 65,
-                  height: 65,
+                  width: 60,
+                  height: 60,
                   decoration: BoxDecoration(
                       color: const Color(0xFF1072ED),
-                      borderRadius: BorderRadius.circular(22)),
+                      borderRadius: BorderRadius.circular(19)),
                   child: const Icon(
                     Icons.calendar_today_rounded,
-                    size: 32,
+                    size: 28,
                     color: Colors.white,
                   ),
                 ),
                 const SizedBox(
-                  height: 8,
+                  height: 6,
                 ),
                 const Text('Schedule',
                     style: TextStyle(
@@ -214,19 +214,19 @@ class MeetingsScreen extends StatelessWidget {
             Column(
               children: [
                 Container(
-                  width: 65,
-                  height: 65,
+                  width: 60,
+                  height: 60,
                   decoration: BoxDecoration(
                       color: const Color(0xFF1072ED),
-                      borderRadius: BorderRadius.circular(22)),
+                      borderRadius: BorderRadius.circular(19)),
                   child: const Icon(
                     CupertinoIcons.arrow_up_square_fill,
-                    size: 32,
+                    size: 28,
                     color: Colors.white,
                   ),
                 ),
                 const SizedBox(
-                  height: 8,
+                  height: 6,
                 ),
                 const Text('Share screen',
                     style: TextStyle(
