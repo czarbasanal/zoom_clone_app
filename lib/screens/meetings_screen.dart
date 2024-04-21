@@ -96,7 +96,6 @@ class MeetingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      scrollDirection: Axis.horizontal,
       children: <Widget>[
         ListTile(
           leading: Icon(Icons.add_rounded),
