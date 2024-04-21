@@ -94,6 +94,24 @@ class _NewMeetingScreenState extends State<NewMeetingScreen> {
                 ),
               ],
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: TextButton(
+                onPressed: () {},
+                style: TextButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 0),
+                    backgroundColor: const Color(0XFF1072ED),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
+                    padding: const EdgeInsets.all(14)),
+                child: const Text(
+                  'Start a meeting',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                )),
           )
         ],
       ),
