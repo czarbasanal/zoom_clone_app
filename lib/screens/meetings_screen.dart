@@ -18,7 +18,11 @@ class _MeetingScreenState extends State<MeetingScreen> {
         centerTitle: true,
         actions: <Widget>[
           IconButton(
-            icon: const Icon(CupertinoIcons.info_circle, color: Colors.white),
+            icon: const Icon(
+              CupertinoIcons.info_circle,
+              color: Colors.white,
+              size: 30,
+            ),
             onPressed: () {},
           ),
         ],
@@ -28,35 +32,49 @@ class _MeetingScreenState extends State<MeetingScreen> {
         child: _getWidgetOption(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        useLegacyColorScheme: false,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(_selectedIndex == 0
-                ? CupertinoIcons.video_camera_solid
-                : CupertinoIcons.video_camera),
+            icon: Icon(
+              _selectedIndex == 0
+                  ? CupertinoIcons.video_camera_solid
+                  : CupertinoIcons.video_camera,
+              size: 30,
+            ),
             label: 'Meetings',
           ),
           BottomNavigationBarItem(
-            icon: Icon(_selectedIndex == 1
-                ? CupertinoIcons.chat_bubble_2_fill
-                : CupertinoIcons.chat_bubble_2),
+            icon: Icon(
+              _selectedIndex == 1
+                  ? CupertinoIcons.bubble_left_bubble_right_fill
+                  : CupertinoIcons.bubble_left_bubble_right,
+              size: 30,
+            ),
             label: 'Team Chat',
           ),
           BottomNavigationBarItem(
-            icon: Icon(_selectedIndex == 2
-                ? CupertinoIcons.mail_solid
-                : CupertinoIcons.mail),
+            icon: Icon(
+                _selectedIndex == 2
+                    ? CupertinoIcons.mail_solid
+                    : CupertinoIcons.mail,
+                size: 30),
             label: 'Mail',
           ),
           BottomNavigationBarItem(
-            icon: Icon(_selectedIndex == 3
-                ? Icons.calendar_today
-                : Icons.calendar_today_outlined),
+            icon: Icon(
+                _selectedIndex == 3
+                    ? Icons.calendar_today_rounded
+                    : Icons.calendar_today_outlined,
+                size: 30),
             label: 'Calendar',
           ),
           BottomNavigationBarItem(
-            icon: Icon(_selectedIndex == 4
-                ? Icons.more_horiz
-                : Icons.more_horiz_outlined),
+            icon: Icon(
+              _selectedIndex == 4
+                  ? Icons.more_horiz
+                  : Icons.more_horiz_outlined,
+              size: 30,
+            ),
             label: 'More',
           ),
         ],
@@ -102,8 +120,8 @@ class MeetingsScreen extends StatelessWidget {
     return Column(children: [
       Container(
         width: double.infinity,
-        height: 130,
-        padding: EdgeInsets.all(20),
+        height: 126,
+        padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           color: const Color(0xFFFAFAFA),
           boxShadow: [
@@ -115,8 +133,8 @@ class MeetingsScreen extends StatelessWidget {
             ),
           ],
         ),
-        child: ListView(
-          scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
               children: [
@@ -136,6 +154,78 @@ class MeetingsScreen extends StatelessWidget {
                   height: 8,
                 ),
                 const Text('New Meeting',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF6E6E6E),
+                    ))
+              ],
+            ),
+            Column(
+              children: [
+                Container(
+                  width: 65,
+                  height: 65,
+                  decoration: BoxDecoration(
+                      color: const Color(0xFF1072ED),
+                      borderRadius: BorderRadius.circular(22)),
+                  child: const Icon(
+                    CupertinoIcons.plus_square_fill,
+                    size: 32,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                const Text('Join',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF6E6E6E),
+                    ))
+              ],
+            ),
+            Column(
+              children: [
+                Container(
+                  width: 65,
+                  height: 65,
+                  decoration: BoxDecoration(
+                      color: const Color(0xFF1072ED),
+                      borderRadius: BorderRadius.circular(22)),
+                  child: const Icon(
+                    Icons.calendar_today_rounded,
+                    size: 32,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                const Text('Schedule',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF6E6E6E),
+                    ))
+              ],
+            ),
+            Column(
+              children: [
+                Container(
+                  width: 65,
+                  height: 65,
+                  decoration: BoxDecoration(
+                      color: const Color(0xFF1072ED),
+                      borderRadius: BorderRadius.circular(22)),
+                  child: const Icon(
+                    CupertinoIcons.arrow_up_square_fill,
+                    size: 32,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                const Text('Share screen',
                     style: TextStyle(
                       fontSize: 12,
                       color: Color(0xFF6E6E6E),
