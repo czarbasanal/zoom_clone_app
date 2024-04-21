@@ -42,7 +42,7 @@ class _MeetingScreenState extends State<MeetingScreen> {
               _selectedIndex == 0
                   ? CupertinoIcons.video_camera_solid
                   : CupertinoIcons.video_camera,
-              size: 30,
+              size: 26,
             ),
             label: 'Meetings',
           ),
@@ -51,7 +51,7 @@ class _MeetingScreenState extends State<MeetingScreen> {
               _selectedIndex == 1
                   ? CupertinoIcons.bubble_left_bubble_right_fill
                   : CupertinoIcons.bubble_left_bubble_right,
-              size: 30,
+              size: 26,
             ),
             label: 'Team Chat',
           ),
@@ -60,7 +60,7 @@ class _MeetingScreenState extends State<MeetingScreen> {
                 _selectedIndex == 2
                     ? CupertinoIcons.mail_solid
                     : CupertinoIcons.mail,
-                size: 30),
+                size: 26),
             label: 'Mail',
           ),
           BottomNavigationBarItem(
@@ -68,7 +68,7 @@ class _MeetingScreenState extends State<MeetingScreen> {
                 _selectedIndex == 3
                     ? Icons.calendar_today_rounded
                     : Icons.calendar_today_outlined,
-                size: 30),
+                size: 26),
             label: 'Calendar',
           ),
           BottomNavigationBarItem(
@@ -76,7 +76,7 @@ class _MeetingScreenState extends State<MeetingScreen> {
               _selectedIndex == 4
                   ? Icons.more_horiz
                   : Icons.more_horiz_outlined,
-              size: 30,
+              size: 26,
             ),
             label: 'More',
           ),
