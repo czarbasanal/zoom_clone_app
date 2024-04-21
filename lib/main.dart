@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zoom/screens/login_screen.dart';
 import 'screens/meetings_screen.dart';
 
 void main() {
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         splashColor: Colors.transparent,
       ),
-      home: MeetingScreen(),
+      home: LoginScreen(),
     );
   }
 }
