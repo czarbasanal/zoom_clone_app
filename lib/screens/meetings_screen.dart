@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class MeetingScreen extends StatefulWidget {
   const MeetingScreen({super.key});
@@ -17,7 +16,10 @@ class _MeetingScreenState extends State<MeetingScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Meetings',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w500)),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
