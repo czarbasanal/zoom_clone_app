@@ -171,16 +171,19 @@ class MeetingsScreen extends StatelessWidget {
             ),
             Column(
               children: [
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                      color: const Color(0xFF1072ED),
-                      borderRadius: BorderRadius.circular(19)),
-                  child: const Icon(
-                    CupertinoIcons.plus_square_fill,
-                    size: 28,
-                    color: Colors.white,
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, '/join'),
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                        color: const Color(0xFF1072ED),
+                        borderRadius: BorderRadius.circular(19)),
+                    child: const Icon(
+                      CupertinoIcons.plus_square_fill,
+                      size: 28,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
                 const SizedBox(

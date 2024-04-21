@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zoom_clone_app/screens/join_screen.dart';
 import 'package:zoom_clone_app/screens/new_meeting_screen.dart';
 import 'screens/meetings_screen.dart';
 
@@ -28,6 +29,11 @@ class MyApp extends StatelessWidget {
             //final args = settings.arguments as SecondPageArguments;
             return MaterialPageRoute(
               builder: (context) => NewMeetingScreen(),
+            );
+          case '/join':
+            //final args = settings.arguments as SecondPageArguments;
+            return MaterialPageRoute(
+              builder: (context) => JoinScreen(),
             );
           default:
           //return MaterialPageRoute(builder: (context) => UndefinedPage(name: settings.name));
