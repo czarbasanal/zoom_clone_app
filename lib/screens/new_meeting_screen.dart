@@ -37,7 +37,7 @@ class _NewMeetingScreenState extends State<NewMeetingScreen> {
                   fontWeight: FontWeight.w400,
                   color: Color(0xFF1072ED))),
           onPressed: () {
-            // Navigator.of(context).pop();
+            Navigator.of(context).pop();
           },
         ),
         leadingWidth: 85,

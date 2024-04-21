@@ -19,7 +19,20 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         splashColor: Colors.transparent,
       ),
-      home: NewMeetingScreen(),
+      home: MeetingScreen(),
+      onGenerateRoute: (RouteSettings settings) {
+        switch (settings.name) {
+          case '/':
+            return MaterialPageRoute(builder: (context) => MeetingScreen());
+          case '/new_meeting':
+            //final args = settings.arguments as SecondPageArguments;
+            return MaterialPageRoute(
+              builder: (context) => NewMeetingScreen(),
+            );
+          default:
+          //return MaterialPageRoute(builder: (context) => UndefinedPage(name: settings.name));
+        }
+      },
     );
   }
 }
