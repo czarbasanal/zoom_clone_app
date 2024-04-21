@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1072ED)),
         useMaterial3: true,
       ),
-      home: MainScreen(),
+      home: MeetingScreen(),
     );
   }
 }

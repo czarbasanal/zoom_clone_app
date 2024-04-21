@@ -1,26 +1,28 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class MainScreen extends StatefulWidget {
+class MeetingScreen extends StatefulWidget {
   @override
-  _MainScreenState createState() => _MainScreenState();
+  _MeetingScreenState createState() => _MeetingScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MeetingScreenState extends State<MeetingScreen> {
   int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Meetings'),
+        title: const Text('Meetings',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
-            icon: const Icon(CupertinoIcons.info_circle),
+            icon: const Icon(CupertinoIcons.info_circle, color: Colors.white),
             onPressed: () {},
           ),
         ],
+        backgroundColor: const Color(0xFF37384C),
       ),
       body: Center(
         child: _getWidgetOption(_selectedIndex),
@@ -93,32 +95,10 @@ class _MainScreenState extends State<MainScreen> {
 }
 
 class MeetingsScreen extends StatelessWidget {
+  const MeetingsScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: <Widget>[
-        ListTile(
-          leading: Icon(Icons.add_rounded),
-          title: Text('New meeting'),
-          onTap: () {/* Implement your action */},
-        ),
-        ListTile(
-          leading: Icon(Icons.add_rounded),
-          title: Text('Join'),
-          onTap: () {/* Implement your action */},
-        ),
-        ListTile(
-          leading: Icon(Icons.schedule_rounded),
-          title: Text('Schedule'),
-          onTap: () {/* Implement your action */},
-        ),
-        ListTile(
-          leading: Icon(Icons.screen_share_rounded),
-          title: Text('Share screen'),
-          onTap: () {/* Implement your action */},
-        ),
-        // Add more items...
-      ],
-    );
+    return Column(children: []);
   }
 }
