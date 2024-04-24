@@ -12,6 +12,8 @@ dependencies:
   google_fonts: ^6.2.1
   cupertino_icons: ^1.0.8
   firebase_core: ^2.30.1
+  firebase_auth: ^4.19.4
+  riverpod: ^2.5.1
 
 dev_dependencies:
   flutter_test:
