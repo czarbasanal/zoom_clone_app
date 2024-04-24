@@ -18,7 +18,6 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         splashColor: Colors.transparent,
       ),
-      
       home: MeetingScreen(),
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
