@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:zoom_clone_app/screens/team_chat_screen.dart';
 
 class MeetingScreen extends StatefulWidget {
   const MeetingScreen({super.key});
@@ -12,25 +13,56 @@ class MeetingScreen extends StatefulWidget {
 class _MeetingScreenState extends State<MeetingScreen> {
   int _selectedIndex = 0;
 
+  AppBar _getAppBar(int index) {
+    switch (index) {
+      case 0: // Meetings
+        return AppBar(
+          title: const Text('Meetings',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
+          centerTitle: true,
+          backgroundColor: const Color(0xFF37384C),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(CupertinoIcons.info_circle,
+                  color: Colors.white, size: 30),
+              onPressed: () {},
+            ),
+          ],
+        );
+      case 1: // Team Chat
+        return AppBar(
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: CircleAvatar(),
+          ),
+          leadingWidth: 50,
+          title: const Text('Team Chat',
+              style: TextStyle(
+                  color: Colors.white, fontWeight: FontWeight.normal)),
+          centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(
+                CupertinoIcons.add,
+                color: Colors.white,
+                size: 30,
+              ),
+              onPressed: () {},
+            ),
+          ],
+          backgroundColor: const Color(0xFF37384C),
+        );
+      // Add cases for other indices if necessary
+      default:
+        return AppBar(); // Default fallback
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Meetings',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
-        centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              CupertinoIcons.info_circle,
-              color: Colors.white,
-              size: 26,
-            ),
-            onPressed: () {},
-          ),
-        ],
-        backgroundColor: const Color(0xFF37384C),
-      ),
+      appBar: _getAppBar(_selectedIndex),
       body: Center(
         child: _getWidgetOption(_selectedIndex),
       ),
@@ -102,7 +134,7 @@ class _MeetingScreenState extends State<MeetingScreen> {
       case 0:
         return MeetingsScreen();
       case 1:
-        return Text('Team Chat');
+        return TeamChatScreen();
       case 2:
         return Text('Mail');
       case 3:
@@ -141,16 +173,19 @@ class MeetingsScreen extends StatelessWidget {
           children: [
             Column(
               children: [
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                      color: const Color(0xFFFF7432),
-                      borderRadius: BorderRadius.circular(19)),
-                  child: const Icon(
-                    CupertinoIcons.video_camera_solid,
-                    size: 40,
-                    color: Colors.white,
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, '/new_meeting'),
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                        color: const Color(0xFFFF7432),
+                        borderRadius: BorderRadius.circular(19)),
+                    child: const Icon(
+                      CupertinoIcons.video_camera_solid,
+                      size: 40,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -165,16 +200,19 @@ class MeetingsScreen extends StatelessWidget {
             ),
             Column(
               children: [
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                      color: const Color(0xFF1072ED),
-                      borderRadius: BorderRadius.circular(19)),
-                  child: const Icon(
-                    CupertinoIcons.plus_square_fill,
-                    size: 28,
-                    color: Colors.white,
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, '/join'),
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                        color: const Color(0xFF1072ED),
+                        borderRadius: BorderRadius.circular(19)),
+                    child: const Icon(
+                      CupertinoIcons.plus_square_fill,
+                      size: 28,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
                 const SizedBox(
