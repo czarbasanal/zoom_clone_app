@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:zoom_clone_app/screens/team_chat_screen.dart';
+import 'team_chat_screen.dart';
 
 class MeetingScreen extends StatefulWidget {
   const MeetingScreen({super.key});

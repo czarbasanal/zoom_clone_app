@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:zoom/screens/sign_up_screen.dart';
+import 'package:zoom/screens/team_chat_screen.dart';
+import 'screens/join_screen.dart';
 import 'screens/meetings_screen.dart';
+import 'screens/new_meeting_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,21 +24,30 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         splashColor: Colors.transparent,
       ),
-      home: MeetingScreen(),
+      home: SignUpScreen(),
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
           case '/':
             return MaterialPageRoute(builder: (context) => MeetingScreen());
+
+          case '/team_chat':
+            //final args = settings.arguments as SecondPageArguments;
+            return MaterialPageRoute(
+              builder: (context) => TeamChatScreen(),
+            );
+
           case '/new_meeting':
             //final args = settings.arguments as SecondPageArguments;
             return MaterialPageRoute(
               builder: (context) => NewMeetingScreen(),
             );
+
           case '/join':
             //final args = settings.arguments as SecondPageArguments;
             return MaterialPageRoute(
               builder: (context) => JoinScreen(),
             );
+
           default:
           //return MaterialPageRoute(builder: (context) => UndefinedPage(name: settings.name));
         }
