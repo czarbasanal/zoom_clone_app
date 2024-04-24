@@ -108,13 +108,6 @@ class SignUpScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 20),
                   Center(
-                    child: AppleSignIn(
-                      text: 'Continue with Apple',
-                      onPressed: () {},
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Center(
                     child: FacebookSignIn(
                       text: 'Continue with Facebook',
                       onPressed: () {},
