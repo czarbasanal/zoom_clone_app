@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:zoom_clone_app/screens/join_screen.dart';
-import 'package:zoom_clone_app/screens/new_meeting_screen.dart';
-import 'package:zoom_clone_app/screens/team_chat_screen.dart';
 import 'screens/meetings_screen.dart';
 
 void main() {
