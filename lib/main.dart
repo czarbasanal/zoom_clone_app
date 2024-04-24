@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:zoom/screens/sign_in_screen.dart';
 import 'package:zoom/screens/sign_up_screen.dart';
 import 'package:zoom/screens/team_chat_screen.dart';
+import 'package:zoom/widgets/sign_in_button.dart';
 import 'screens/join_screen.dart';
 import 'screens/meetings_screen.dart';
 import 'screens/new_meeting_screen.dart';
@@ -33,6 +35,9 @@ class MyApp extends StatelessWidget {
         switch (settings.name) {
           case '/':
             return MaterialPageRoute(builder: (context) => MeetingScreen());
+
+          case '/sign_in':
+            return MaterialPageRoute(builder: (context) => SignInScreen());
 
           case '/team_chat':
             //final args = settings.arguments as SecondPageArguments;

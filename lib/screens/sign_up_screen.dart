@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:zoom/utils/colors.dart';
-import 'package:zoom/widgets/apple_button.dart';
 import 'package:zoom/widgets/facebook_button.dart';
 import 'package:zoom/widgets/final_sign_up.dart';
 import 'package:zoom/widgets/google_button.dart';
@@ -17,6 +16,25 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool _isLoading = false;
+  bool _isButtonEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    emailController.addListener(_validateForm);
+    passwordController.addListener(_validateForm);
+  }
+
+  void _validateForm() {
+    bool isButtonEnabled =
+        emailController.text.isNotEmpty && passwordController.text.isNotEmpty;
+    if (isButtonEnabled != _isButtonEnabled) {
+      setState(() {
+        _isButtonEnabled = isButtonEnabled;
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -26,16 +44,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> _signUpWithEmailAndPassword() async {
+    setState(() {
+      _isLoading = true;
+    });
     final authService = AuthService();
-    final userCredential = await authService.signUpWithEmailPassword(
-      emailController.text,
-      passwordController.text,
-    );
+    try {
+      final userCredential = await authService.signUpWithEmailPassword(
+        emailController.text,
+        passwordController.text,
+      );
 
-    if (userCredential != null) {
-      Navigator.of(context).pushReplacementNamed('/');
-    } else {
-      // TODO: Handle errors (ideally, in a user-friendly way such as showing an alert dialog)
+      if (userCredential != null) {
+        Navigator.of(context).pushReplacementNamed('/sign_in');
+      } else {
+        // Handle errors here
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -95,9 +125,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ],
                   ),
-                  child: const TextField(
+                  child: TextField(
+                      controller: emailController,
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           hintText: 'Email',
                           hintStyle: TextStyle(
                             fontSize: 16,
@@ -106,6 +137,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           border: UnderlineInputBorder(
                               borderSide: BorderSide.none))),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.15),
+                        spreadRadius: 0.75,
+                        blurRadius: 0.5,
+                        offset: const Offset(1, 0.25),
+                      ),
+                    ],
+                  ),
+                  child: TextField(
+                    controller: passwordController,
+                    textAlign: TextAlign.center,
+                    decoration: const InputDecoration(
+                        hintText: 'Password',
+                        hintStyle: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.normal,
+                          color: Color(0xFF6E6E6E),
+                        ),
+                        border:
+                            UnderlineInputBorder(borderSide: BorderSide.none)),
+                    obscureText: true,
+                  ),
                 ),
                 const SizedBox(height: 20),
                 Center(
@@ -146,7 +206,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Center(
                   child: FacebookSignIn(
                     text: 'Continue with Facebook',

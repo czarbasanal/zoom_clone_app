@@ -3,53 +3,22 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  // Function to handle user registration with Email and Password
-  Future<UserCredential?> signUpWithEmailPassword(
-      String email, String password) async {
-    try {
-      final UserCredential userCredential =
-          await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return userCredential;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('An account already exists for that email.');
-      }
-      return null;
-    } catch (e) {
-      // Handle other errors
-      print(e);
-      return null;
-    }
+  Future<User?> signUpWithEmailPassword(String email, String password) async {
+    UserCredential userCredential =
+        await _firebaseAuth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    User? user = userCredential.user;
+    await user?.sendEmailVerification();
+    return user;
   }
 
-  // Function to handle user sign-in with Email and Password
-  Future<UserCredential?> signInWithEmailPassword(
-      String email, String password) async {
-    try {
-      final UserCredential userCredential =
-          await _firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return userCredential;
-    } on FirebaseAuthException catch (e) {
-      // Handle Firebase authentication errors here
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
-      }
-      return null;
-    } catch (e) {
-      // Handle other errors
-      print(e);
-      return null;
-    }
+  // Check if the user's email is verified
+  Future<bool> isEmailVerified() async {
+    User? user = _firebaseAuth.currentUser;
+    await user?.reload();
+    return user?.emailVerified ?? false;
   }
 
   // Function to handle user sign-out

@@ -19,13 +19,12 @@ class FinalSignUp extends StatelessWidget {
             fontWeight: FontWeight.bold),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: secondaryWhite,
+        backgroundColor: primaryBlue,
         minimumSize: const Size(350, 50),
         elevation: 0,
         shadowColor: Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.circular(10.0), // Adjust border radius as needed
+          borderRadius: BorderRadius.circular(10.0),
         ),
       ),
     );
