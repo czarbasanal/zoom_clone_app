@@ -14,9 +14,7 @@ class FinalSignUp extends StatelessWidget {
       child: Text(
         text,
         style: const TextStyle(
-            fontSize: 17,
-            color: Color(0xFF8A8A8A),
-            fontWeight: FontWeight.bold),
+            fontSize: 17, color: Colors.white, fontWeight: FontWeight.bold),
       ),
       style: ElevatedButton.styleFrom(
         backgroundColor: primaryBlue,

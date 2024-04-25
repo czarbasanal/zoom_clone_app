@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         splashColor: Colors.transparent,
       ),
-      home: LoginScreen(),
+      home: SignUpScreen(),
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
           case '/':

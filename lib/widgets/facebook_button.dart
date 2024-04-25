@@ -11,17 +11,17 @@ class FacebookSignIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 350, // Fixed width of the button
-      height: 50, // Fixed height of the button
+      width: 350,
+      height: 50,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.zero, // Remove padding to fit exact dimensions
+          padding: EdgeInsets.zero,
           backgroundColor: primaryWhite,
           elevation: 0,
           shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(16.0),
           ),
         ),
         child: Row(
@@ -35,8 +35,10 @@ class FacebookSignIn extends StatelessWidget {
             SizedBox(width: 10),
             Text(
               text,
-              
-              style: TextStyle(fontSize: 17, color: Color(0xFF1e1d25),),
+              style: TextStyle(
+                fontSize: 17,
+                color: Color(0xFF1e1d25),
+              ),
             ),
           ],
         ),

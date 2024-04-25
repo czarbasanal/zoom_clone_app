@@ -106,14 +106,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     'ENTER YOUR EMAIL ADDRESS',
                     style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFFBDBDBD),
+                      fontWeight: FontWeight.normal,
+                      color: Color(0xFF6E6E6E),
                     ),
                   ),
                 ),
                 const SizedBox(height: 20),
                 Container(
-                  height: 56,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
@@ -125,46 +124,56 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ],
                   ),
-                  child: TextField(
-                      controller: emailController,
-                      textAlign: TextAlign.center,
-                      decoration: const InputDecoration(
-                          hintText: 'Email',
-                          hintStyle: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.normal,
-                            color: Color(0xFF6E6E6E),
-                          ),
-                          border: UnderlineInputBorder(
-                              borderSide: BorderSide.none))),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  height: 56,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.15),
-                        spreadRadius: 0.75,
-                        blurRadius: 0.5,
-                        offset: const Offset(1, 0.25),
+                  child: Column(
+                    children: [
+                      TextField(
+                          controller: emailController,
+                          textAlign: TextAlign.center,
+                          decoration: const InputDecoration(
+                              hintText: 'Email',
+                              hintStyle: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.normal,
+                                color: Color(0xFF6E6E6E),
+                              ),
+                              border: UnderlineInputBorder(
+                                  borderSide: BorderSide.none))),
+                      Divider(
+                        height: 0,
+                        color: Colors.grey.withOpacity(0.2),
+                      ),
+                      TextField(
+                        controller: passwordController,
+                        textAlign: TextAlign.center,
+                        decoration: const InputDecoration(
+                            hintText: 'Password',
+                            hintStyle: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                              color: Color(0xFF6E6E6E),
+                            ),
+                            border: UnderlineInputBorder(
+                                borderSide: BorderSide.none)),
+                        obscureText: true,
+                      ),
+                      Divider(
+                        height: 0,
+                        color: Colors.grey.withOpacity(0.2),
+                      ),
+                      TextField(
+                        textAlign: TextAlign.center,
+                        decoration: const InputDecoration(
+                            hintText: 'Confirm Password',
+                            hintStyle: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                              color: Color(0xFF6E6E6E),
+                            ),
+                            border: UnderlineInputBorder(
+                                borderSide: BorderSide.none)),
+                        obscureText: true,
                       ),
                     ],
-                  ),
-                  child: TextField(
-                    controller: passwordController,
-                    textAlign: TextAlign.center,
-                    decoration: const InputDecoration(
-                        hintText: 'Password',
-                        hintStyle: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal,
-                          color: Color(0xFF6E6E6E),
-                        ),
-                        border:
-                            UnderlineInputBorder(borderSide: BorderSide.none)),
-                    obscureText: true,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -192,8 +201,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     'OR SELECT YOUR SIGN UP METHOD',
                     style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFFBDBDBD),
+                      fontWeight: FontWeight.normal,
+                      color: Color(0xFF6E6E6E),
                     ),
                   ),
                 ),
@@ -206,7 +215,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 12),
                 Center(
                   child: FacebookSignIn(
                     text: 'Continue with Facebook',
