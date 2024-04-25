@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zoom/screens/login_screen.dart';
 import 'package:zoom/screens/sign_in_screen.dart';
 import 'package:zoom/screens/sign_up_screen.dart';
 import 'package:zoom/screens/team_chat_screen.dart';
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         splashColor: Colors.transparent,
       ),
-      home: SignUpScreen(),
+      home: LoginScreen(),
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
           case '/':

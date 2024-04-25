@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class BottomRoundedContainer extends StatelessWidget {
-  final Widget child;
   final double height;
   final double width;
   final Color color;
@@ -9,7 +8,6 @@ class BottomRoundedContainer extends StatelessWidget {
 
   const BottomRoundedContainer({
     Key? key,
-    required this.child,
     this.height = 200.0,
     this.width = double.infinity,
     this.color = Colors.white,
@@ -30,7 +28,6 @@ class BottomRoundedContainer extends StatelessWidget {
             topRight: Radius.circular(borderRadius),
           ),
         ),
-        child: child,
       ),
     );
   }

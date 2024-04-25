@@ -10,16 +10,17 @@ class SignUp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-
-         Navigator.push(
+        Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => SignUpScreen()),
         );
-
       },
       child: Text(
         text,
-        style: const TextStyle(fontSize: 17, color: Color(0XFF1e1d25)),
+        style: const TextStyle(
+            fontSize: 18,
+            color: Color(0XFF1e1d25),
+            fontWeight: FontWeight.bold),
       ),
       style: ElevatedButton.styleFrom(
         backgroundColor: secondaryWhite,
@@ -28,7 +29,7 @@ class SignUp extends StatelessWidget {
         shadowColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius:
-              BorderRadius.circular(10.0), // Adjust border radius as needed
+              BorderRadius.circular(16.0), // Adjust border radius as needed
         ),
       ),
     );
