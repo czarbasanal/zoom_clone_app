@@ -10,12 +10,7 @@ class SignIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SignInScreen()),
-        );
-      },
+      onPressed: () => Navigator.pushNamed(context, '/sign_in'),
       style: ElevatedButton.styleFrom(
         backgroundColor: secondaryWhite,
         minimumSize: const Size(350, 50),

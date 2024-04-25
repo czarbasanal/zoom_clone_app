@@ -9,12 +9,7 @@ class SignUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SignUpScreen()),
-        );
-      },
+      onPressed: () => Navigator.pushNamed(context, '/sign_up'),
       child: Text(
         text,
         style: const TextStyle(

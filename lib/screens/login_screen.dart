@@ -35,11 +35,11 @@ class LoginScreen extends StatelessWidget {
                           'assets/images/zoom_white_logo.png',
                           width: 140,
                         ),
-                        const SizedBox(height: 230),
+                        const SizedBox(height: 200),
                         const Text(
                           'Welcome',
                           style: TextStyle(
-                              fontSize: 22,
+                              fontSize: 20,
                               fontWeight: FontWeight.w500,
                               color: Color(0XFF1e1d25)),
                         ),
@@ -47,7 +47,7 @@ class LoginScreen extends StatelessWidget {
                         const Text(
                           'Get started with your account',
                           style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 16,
                               fontWeight: FontWeight.normal,
                               color: Color(0XFF1e1d25)),
                         ),

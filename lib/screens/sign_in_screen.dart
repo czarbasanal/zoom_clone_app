@@ -11,29 +11,25 @@ class SignInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData.light().copyWith(
-        scaffoldBackgroundColor: tertiaryWhite,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        title: const Text('Sign in',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
+        centerTitle: true,
+        leading: IconButton(
+            icon: const Icon(
+              CupertinoIcons.chevron_left,
+              size: 30,
+            ),
+            color: const Color(0xFF1072ED),
+            onPressed: () {
+              Navigator.of(context).pop();
+            }),
       ),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Sign in',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
-          centerTitle: true,
-          leading: IconButton(
-              icon: const Icon(
-                CupertinoIcons.chevron_left,
-                size: 30,
-              ),
-              color: const Color(0xFF1072ED),
-              onPressed: () {
-                Navigator.of(context).pop();
-              }),
-        ),
-        body: Center(
+      body: SingleChildScrollView(
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,7 +96,7 @@ class SignInScreen extends StatelessWidget {
               Center(
                 child: FinalSignIn(
                   text: 'Sign in',
-                  onPressed: () {},
+                  onPressed: () => Navigator.pushNamed(context, '/meetings'),
                 ),
               ),
               const SizedBox(height: 20),

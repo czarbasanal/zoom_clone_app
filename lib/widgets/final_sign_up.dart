@@ -22,7 +22,7 @@ class FinalSignUp extends StatelessWidget {
         elevation: 0,
         shadowColor: Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(16.0),
         ),
       ),
     );

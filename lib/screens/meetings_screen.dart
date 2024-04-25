@@ -16,6 +16,7 @@ class _MeetingScreenState extends State<MeetingScreen> {
     switch (index) {
       case 0: // Meetings
         return AppBar(
+          automaticallyImplyLeading: false,
           title: const Text('Meetings',
               style:
                   TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
