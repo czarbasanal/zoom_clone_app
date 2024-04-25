@@ -1,6 +1,11 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:zoom_clone_app/screens/calendar_screen.dart';
+import 'package:zoom_clone_app/screens/mail_screen.dart';
+import 'package:zoom_clone_app/screens/more_screen.dart';
 import 'package:zoom_clone_app/screens/team_chat_screen.dart';
 
 class MeetingScreen extends StatefulWidget {
@@ -34,7 +39,9 @@ class _MeetingScreenState extends State<MeetingScreen> {
         return AppBar(
           leading: Padding(
             padding: const EdgeInsets.only(left: 20),
-            child: CircleAvatar(),
+            child: CircleAvatar(
+              backgroundImage: AssetImage("assets/Zoom.png"),
+            ),
           ),
           leadingWidth: 50,
           title: const Text('Team Chat',
@@ -53,9 +60,32 @@ class _MeetingScreenState extends State<MeetingScreen> {
           ],
           backgroundColor: const Color(0xFF37384C),
         );
-      // Add cases for other indices if necessary
+      case 2: // Mail
+        return AppBar(
+          title: const Text('Mail',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
+          centerTitle: true,
+          backgroundColor: const Color(0xFF37384C),
+        );
+      case 3: // Calendar
+        return AppBar(
+          title: const Text('Calendar',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
+          centerTitle: true,
+          backgroundColor: const Color(0xFF37384C),
+        );
+      case 4: // Calendar
+        return AppBar(
+          title: const Text('More',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
+          centerTitle: true,
+          backgroundColor: const Color(0xFF37384C),
+        );
       default:
-        return AppBar(); // Default fallback
+        return AppBar();
     }
   }
 
@@ -136,11 +166,11 @@ class _MeetingScreenState extends State<MeetingScreen> {
       case 1:
         return TeamChatScreen();
       case 2:
-        return Text('Mail');
+        return MailScreen();
       case 3:
-        return Text('Calendar');
+        return CalendarScreen();
       case 4:
-        return Text('More');
+        return MoreScreen();
       default:
         return Text('Error');
     }
