@@ -22,8 +22,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   void initState() {
     super.initState();
-    emailEditingController.addListener(_validateForm);
-    passwordEditingController.addListener(_validateForm);
+    emailEditingController;
+    passwordEditingController;
   }
 
   void _validateForm() {
@@ -64,121 +64,149 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Navigator.of(context).pop();
               }),
         ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 20),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Text(
-                    'ENTER YOUR EMAIL ADDRESS',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.normal,
-                      color: Color(0xFF6E6E6E),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.15),
-                        spreadRadius: 0.75,
-                        blurRadius: 0.5,
-                        offset: const Offset(1, 0.25),
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 20),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Text(
+                        'ENTER YOUR EMAIL ADDRESS',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                          color: Color(0xFF6E6E6E),
+                        ),
                       ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      TextField(
-                          controller: emailEditingController,
-                          textAlign: TextAlign.center,
-                          decoration: const InputDecoration(
-                              hintText: 'Email',
-                              hintStyle: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.normal,
-                                color: Color(0xFF6E6E6E),
-                              ),
-                              border: UnderlineInputBorder(
-                                  borderSide: BorderSide.none))),
-                      Divider(
-                        height: 0,
-                        color: Colors.grey.withOpacity(0.2),
-                      ),
-                      TextField(
-                        controller: passwordEditingController,
-                        textAlign: TextAlign.center,
-                        decoration: const InputDecoration(
-                            hintText: 'Password',
-                            hintStyle: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                              color: Color(0xFF6E6E6E),
-                            ),
-                            border: UnderlineInputBorder(
-                                borderSide: BorderSide.none)),
-                        obscureText: true,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Center(
-                  child: FinalSignUp(
-                    text: 'Continue',
-                    onPressed: () {
-                      signUpState.signUp(
-                        emailEditingController.text,
-                        passwordEditingController.text,
-                      );
-
-                      Navigator.pushNamed(context, '/sign_in');
-                    },
-                  ),
-                ),
-                const SizedBox(height: 20),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Text(
-                    'By proceeding, I agree to the Zoom\'s Privacy Statement and Terms of Service',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.normal,
                     ),
-                  ),
-                ),
-                const SizedBox(height: 40),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Text(
-                    'OR SELECT YOUR SIGN UP METHOD',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.normal,
-                      color: Color(0xFF6E6E6E),
+                    const SizedBox(height: 20),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.15),
+                            spreadRadius: 0.75,
+                            blurRadius: 0.5,
+                            offset: const Offset(1, 0.25),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          TextField(
+                              controller: emailEditingController,
+                              textAlign: TextAlign.center,
+                              decoration: const InputDecoration(
+                                  hintText: 'Email',
+                                  hintStyle: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.normal,
+                                    color: Color(0xFF6E6E6E),
+                                  ),
+                                  border: UnderlineInputBorder(
+                                      borderSide: BorderSide.none))),
+                          Divider(
+                            height: 0,
+                            color: Colors.grey.withOpacity(0.2),
+                          ),
+                          TextField(
+                            controller: passwordEditingController,
+                            textAlign: TextAlign.center,
+                            decoration: const InputDecoration(
+                                hintText: 'Password',
+                                hintStyle: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.normal,
+                                  color: Color(0xFF6E6E6E),
+                                ),
+                                border: UnderlineInputBorder(
+                                    borderSide: BorderSide.none)),
+                            obscureText: true,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: FinalSignUp(
+                          text: 'Continue',
+                          onPressed: () async {
+                            setState(() {
+                              _isLoading = true; // Start loading
+                            });
+                            try {
+                              await signUpState.signUp(
+                                emailEditingController.text,
+                                passwordEditingController.text,
+                              );
+                              Navigator.pushNamed(
+                                  context, '/sign_in'); // Navigate on success
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text('Failed to sign up: $e')),
+                              );
+                            } finally {
+                              setState(() {
+                                _isLoading = false;
+                              });
+                            }
+                          }),
+                    ),
+                    const SizedBox(height: 20),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Text(
+                        'By proceeding, I agree to the Zoom\'s Privacy Statement and Terms of Service',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Text(
+                        'OR SELECT YOUR SIGN UP METHOD',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                          color: Color(0xFF6E6E6E),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                    Center(
+                      child: GoogleSignIn(
+                        text: 'Continue with Google',
+                        onPressed: () {
+                          signUpState.googleSignIn();
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 40),
-                Center(
-                  child: GoogleSignIn(
-                    text: 'Continue with Google',
-                    onPressed: () {
-                      // TODO: Implement Google sign-in functionality
-                    },
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
+            if (_isLoading)
+              const Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(0, 0, 0, 0.5),
+                  ),
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ),
+          ],
         ),
       );
     });

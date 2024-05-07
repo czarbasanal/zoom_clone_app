@@ -7,10 +7,8 @@ class AuthServiceImplementation implements AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
-//getter Method for excessing the current user so that we can display the essential info in our meeting Screen or while integrating Jitsi.
   User get user => _firebaseAuth.currentUser!;
 
-  // we will be using this for persisting state later on using some provider.
   Stream<User?> get userState => _firebaseAuth.authStateChanges();
 
   @override
@@ -76,7 +74,10 @@ class AuthServiceImplementation implements AuthService {
       User? user = userCredential.user;
       if (user != null) {
         if (userCredential.additionalUserInfo!.isNewUser) {
-          await _firebaseFirestore.collection('Users').doc(user.uid).set({
+          await _firebaseFirestore
+              .collection('UserCollection')
+              .doc(user.uid)
+              .set({
             'name': user.displayName,
             'email': user.email,
             'photoURL': user.photoURL,
