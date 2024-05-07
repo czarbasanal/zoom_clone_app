@@ -149,16 +149,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                 SizedBox(height: 32),
                 Center(
                   child: GoogleSignIn(
-                    text: 'Continue with Google',
-                    onPressed: () {},
-                  ),
-                ),
-                SizedBox(height: 12),
-                Center(
-                  child: FacebookSignIn(
-                    text: 'Continue with Facebook',
-                    onPressed: () {},
-                  ),
+                      text: 'Continue with Google',
+                      onPressed: () {
+                        signInState.googleSignIn();
+                      }),
                 ),
               ],
             ),

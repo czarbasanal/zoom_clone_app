@@ -139,6 +139,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         emailEditingController.text,
                         passwordEditingController.text,
                       );
+
+                      Navigator.pushNamed(context, '/sign_in');
                     },
                   ),
                 ),

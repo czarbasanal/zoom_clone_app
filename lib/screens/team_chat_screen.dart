@@ -2,12 +2,27 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class TeamChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Text('Team Chat',
+            style: TextStyle(
+                fontSize: 18.0,
+                color: Colors.white,
+                fontWeight: FontWeight.w500)),
+        centerTitle: true,
+        backgroundColor: const Color(0xFF37384C),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(CupertinoIcons.add, color: Colors.white, size: 24),
+            onPressed: () {},
+          ),
+        ],
+      ),
       body: Column(
         children: <Widget>[
           Padding(

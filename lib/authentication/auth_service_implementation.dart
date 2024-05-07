@@ -76,10 +76,7 @@ class AuthServiceImplementation implements AuthService {
       User? user = userCredential.user;
       if (user != null) {
         if (userCredential.additionalUserInfo!.isNewUser) {
-          await _firebaseFirestore
-              .collection('UserCollection')
-              .doc(user.uid)
-              .set({
+          await _firebaseFirestore.collection('Users').doc(user.uid).set({
             'name': user.displayName,
             'email': user.email,
             'photoURL': user.photoURL,
