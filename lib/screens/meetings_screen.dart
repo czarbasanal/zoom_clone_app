@@ -3,10 +3,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoom_clone_app/screens/calendar_screen.dart';
-import 'package:zoom_clone_app/screens/mail_screen.dart';
-import 'package:zoom_clone_app/screens/more_screen.dart';
-import 'package:zoom_clone_app/screens/team_chat_screen.dart';
 
 class MeetingScreen extends StatefulWidget {
   const MeetingScreen({super.key});
