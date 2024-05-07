@@ -30,12 +30,12 @@ class LoginScreen extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const SizedBox(height: 250),
+                        const SizedBox(height: 300),
                         Image.asset(
                           'assets/images/zoom_white_logo.png',
                           width: 140,
                         ),
-                        const SizedBox(height: 200),
+                        const SizedBox(height: 215),
                         const Text(
                           'Welcome',
                           style: TextStyle(
