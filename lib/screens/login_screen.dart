@@ -36,27 +36,6 @@ class LoginScreen extends StatelessWidget {
                           width: 140,
                         ),
                         const SizedBox(height: 215),
-                        const Text(
-                          'Welcome',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0XFF1e1d25)),
-                        ),
-                        const SizedBox(height: 5),
-                        const Text(
-                          'Get started with your account',
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                              color: Color(0XFF1e1d25)),
-                        ),
-                        const SizedBox(height: 30),
-                        CustomButton(text: 'Join a meeting'),
-                        SizedBox(height: 14),
-                        SignUp(text: 'Sign up'),
-                        SizedBox(height: 14),
-                        SignIn(text: 'Sign in'),
                       ],
                     ),
                   ),
