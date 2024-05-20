@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:zoom/screens/sign_in_screen.dart';
 import 'package:zoom/utils/colors.dart';
 
 class SignIn extends StatelessWidget {

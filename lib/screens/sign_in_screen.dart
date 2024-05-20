@@ -17,6 +17,8 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   final TextEditingController passwordEditingController =
       TextEditingController();
 
+  bool _isLoading = false;
+
   @override
   void dispose() {
     emailEditingController.dispose();
@@ -147,12 +149,27 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                 ),
                 SizedBox(height: 32),
                 Center(
-                  child: GoogleSignIn(
-                      text: 'Continue with Google',
-                      onPressed: () {
-                        signInState.googleSignIn();
-                      }),
-                ),
+                    child: GoogleSignIn(
+                  text: 'Continue with Google',
+                  onPressed: () async {
+                    setState(() {
+                      _isLoading = true;
+                    });
+
+                    try {
+                      await signInState.googleSignIn();
+                      Navigator.pushNamed(context, '/meetings');
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Failed to sign in: $e')),
+                      );
+                    } finally {
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    }
+                  },
+                )),
               ],
             ),
           ),

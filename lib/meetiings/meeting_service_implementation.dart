@@ -15,6 +15,11 @@ class MeetingServiceImplementation implements MeetingService {
         configOverrides: {
           "startWithAudioMuted": true,
           "startWithVideoMuted": true,
+          "enableNoAudioDetection:": true
+        },
+        featureFlags: {
+          "welcomepage.enabled": false,
+          "unsaferoomwarning.enabled": false,
         },
         userInfo: JitsiMeetUserInfo(
           displayName: _authServiceImplementation.user.displayName,
@@ -22,6 +27,7 @@ class MeetingServiceImplementation implements MeetingService {
           avatar: _authServiceImplementation.user.photoURL,
         ),
       );
+
       await jitsiMeet.join(options);
     } catch (e) {
       print("Error starting meeting: $e");

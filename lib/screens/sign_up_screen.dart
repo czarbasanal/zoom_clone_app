@@ -138,15 +138,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           text: 'Continue',
                           onPressed: () async {
                             setState(() {
-                              _isLoading = true; // Start loading
+                              _isLoading = true;
                             });
                             try {
                               await signUpState.signUp(
                                 emailEditingController.text,
                                 passwordEditingController.text,
                               );
-                              Navigator.pushNamed(
-                                  context, '/sign_in'); // Navigate on success
+                              Navigator.pushNamed(context, '/sign_in');
                             } catch (e) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
@@ -186,8 +185,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Center(
                       child: GoogleSignIn(
                         text: 'Continue with Google',
-                        onPressed: () {
-                          signUpState.googleSignIn();
+                        onPressed: () async {
+                          setState(() {
+                            _isLoading = true;
+                          });
+
+                          try {
+                            await signUpState.googleSignIn();
+                            Navigator.pushNamed(context, '/meetings');
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Failed to sign up: $e')),
+                            );
+                          } finally {
+                            setState(() {
+                              _isLoading = false;
+                            });
+                          }
                         },
                       ),
                     ),
