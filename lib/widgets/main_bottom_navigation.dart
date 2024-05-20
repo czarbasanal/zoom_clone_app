@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:zoom/authentication/auth_service_implementation.dart';
 import 'package:zoom/screens/meetings_screen.dart';
 import 'package:zoom/screens/team_chat_screen.dart';
+import 'package:zoom/widgets/logout_button.dart';
 
 class MainBottomNavigation extends StatefulWidget {
   const MainBottomNavigation({super.key});
@@ -18,7 +20,8 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
     TeamChatScreen(),
     const Text('This is a Mail Screen'),
     const Text('This is a Calendar Screen'),
-    const Text('More')
+    LogoutButton(
+        text: 'Logout', onPressed: () => AuthServiceImplementation().logOut())
   ];
 
   @override

@@ -191,7 +191,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           });
 
                           try {
-                            await signUpState.googleSignIn();
+                            await signUpState.googleSignIn(context);
                             Navigator.pushNamed(context, '/meetings');
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(

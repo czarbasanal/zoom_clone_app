@@ -1,5 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:js';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:zoom/authentication/auth_service_implementation.dart';
 
@@ -12,9 +14,9 @@ class AuthNotifier extends StateNotifier<bool> {
 
   Stream<User?> get authStateChange => _authServiceImplementation.userState;
 
-  Future<void> googleSignIn() async {
+  Future<void> googleSignIn(BuildContext context) async {
     state = false;
-    await _authServiceImplementation.googleSignIn();
+    await _authServiceImplementation.signInWithGoogle(context);
     state = true;
   }
 

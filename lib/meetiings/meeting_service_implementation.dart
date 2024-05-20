@@ -5,6 +5,7 @@ import 'package:zoom/meetiings/meeting_service.dart';
 class MeetingServiceImplementation implements MeetingService {
   final AuthServiceImplementation _authServiceImplementation =
       AuthServiceImplementation();
+
   final JitsiMeet jitsiMeet = JitsiMeet();
 
   @override

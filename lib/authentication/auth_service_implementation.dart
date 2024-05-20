@@ -1,18 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:zoom/authentication/auth_service.dart';
+import 'package:zoom/utils/utils.dart';
 
 class AuthServiceImplementation implements AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
+  Stream<User?> get userState => _firebaseAuth.authStateChanges();
   User get user => _firebaseAuth.currentUser!;
 
-  Stream<User?> get userState => _firebaseAuth.authStateChanges();
-
   @override
-  Future<void> googleSignIn() async {
+  Future<void> signInWithGoogle(BuildContext context) async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -23,6 +24,7 @@ class AuthServiceImplementation implements AuthService {
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
+
       UserCredential userCredential =
           await _firebaseAuth.signInWithCredential(authCredential);
 
@@ -41,7 +43,7 @@ class AuthServiceImplementation implements AuthService {
         }
       }
     } on FirebaseAuthException catch (e) {
-      e.message.toString();
+      showSnackBar(context, e.message!);
     }
   }
 
