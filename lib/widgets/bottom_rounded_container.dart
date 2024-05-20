@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:zoom/widgets/custom_button.dart';
+import 'package:zoom/widgets/sign_in_button.dart';
+import 'package:zoom/widgets/sign_up_button.dart';
 
 class BottomRoundedContainer extends StatelessWidget {
   final double height;
@@ -26,6 +29,35 @@ class BottomRoundedContainer extends StatelessWidget {
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(borderRadius),
             topRight: Radius.circular(borderRadius),
+          ),
+        ),
+        child: const Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'Welcome',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0XFF1e1d25)),
+              ),
+              SizedBox(height: 5),
+              Text(
+                'Get started with your account',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.normal,
+                    color: Color(0XFF1e1d25)),
+              ),
+              SizedBox(height: 30),
+              CustomButton(text: 'Join a meeting'),
+              SizedBox(height: 14),
+              SignUp(text: 'Sign up'),
+              SizedBox(height: 14),
+              SignIn(text: 'Sign in'),
+            ],
           ),
         ),
       ),
