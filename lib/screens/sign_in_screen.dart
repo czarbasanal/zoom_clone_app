@@ -157,7 +157,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     });
 
                     try {
-                      await signInState.googleSignIn();
+                      await signInState.googleSignIn(context);
                       Navigator.pushNamed(context, '/meetings');
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(

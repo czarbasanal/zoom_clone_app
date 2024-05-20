@@ -48,45 +48,14 @@ class MyApp extends ConsumerWidget {
         ),
         loading: () => const CircularProgressIndicator(),
       ),
-      onGenerateRoute: (RouteSettings settings) {
-        switch (settings.name) {
-          case '/':
-            return MaterialPageRoute(builder: (context) => const LoginScreen());
-
-          case '/sign_in':
-            return MaterialPageRoute(
-                builder: (context) => const SignInScreen());
-
-          case '/sign_up':
-            return MaterialPageRoute(
-                builder: (context) => const SignUpScreen());
-
-          case '/meetings':
-            return MaterialPageRoute(
-                builder: (context) => const MeetingScreen());
-
-          case '/team_chat':
-            //final args = settings.arguments as SecondPageArguments;
-            return MaterialPageRoute(
-              builder: (context) => TeamChatScreen(),
-            );
-
-          case '/new_meeting':
-            //final args = settings.arguments as SecondPageArguments;
-            return MaterialPageRoute(
-              builder: (context) => const NewMeetingScreen(),
-            );
-
-          case '/join':
-            //final args = settings.arguments as SecondPageArguments;
-            return MaterialPageRoute(
-              builder: (context) => const JoinScreen(),
-            );
-
-          default:
-            //return MaterialPageRoute(builder: (context) => UndefinedPage(name: settings.name));
-            return MaterialPageRoute(builder: (context) => const LoginScreen());
-        }
+      routes: {
+        '/login': (context) => const LoginScreen(),
+        '/sign_in': (context) => const SignInScreen(),
+        '/sign_up': (context) => const SignUpScreen(),
+        '/meetings': (context) => const MeetingScreen(),
+        '/team_chat': (context) => TeamChatScreen(),
+        '/new_meeting': (context) => const NewMeetingScreen(),
+        '/join': (context) => const JoinScreen(),
       },
     );
   }
