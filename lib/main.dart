@@ -1,43 +1,91 @@
 import 'package:flutter/material.dart';
-import 'package:zoom/screens/join_screen.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:zoom/riverpod/providers.dart';
 import 'package:zoom/screens/login_screen.dart';
-import 'package:zoom/screens/new_meeting_screen.dart';
+import 'package:zoom/screens/sign_in_screen.dart';
+import 'package:zoom/screens/sign_up_screen.dart';
+import 'package:zoom/screens/team_chat_screen.dart';
+import 'package:zoom/utils/colors.dart';
+import 'package:zoom/widgets/error.dart';
+import 'package:zoom/widgets/main_bottom_navigation.dart';
+import 'screens/join_screen.dart';
 import 'screens/meetings_screen.dart';
+import 'screens/new_meeting_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authenticationState = ref.watch(authStateProvider);
     return MaterialApp(
       title: 'Zoom Clone',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1072ED)),
-        useMaterial3: true,
-        splashColor: Colors.transparent,
+          useMaterial3: true,
+          splashColor: Colors.transparent,
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1072ED))
+              .copyWith(background: tertiaryWhite)),
+      home: authenticationState.when(
+        data: (data) {
+          if (data != null) {
+            return const MainBottomNavigation();
+          }
+          return const LoginScreen();
+        },
+        error: (error, stackTrace) => ErrorScreen(
+          errorText: error.toString(),
+        ),
+        loading: () => const CircularProgressIndicator(),
       ),
-      home: LoginScreen(),
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
           case '/':
-            return MaterialPageRoute(builder: (context) => MeetingScreen());
+            return MaterialPageRoute(builder: (context) => const LoginScreen());
+
+          case '/sign_in':
+            return MaterialPageRoute(
+                builder: (context) => const SignInScreen());
+
+          case '/sign_up':
+            return MaterialPageRoute(
+                builder: (context) => const SignUpScreen());
+
+          case '/meetings':
+            return MaterialPageRoute(
+                builder: (context) => const MeetingScreen());
+
+          case '/team_chat':
+            //final args = settings.arguments as SecondPageArguments;
+            return MaterialPageRoute(
+              builder: (context) => TeamChatScreen(),
+            );
+
           case '/new_meeting':
             //final args = settings.arguments as SecondPageArguments;
             return MaterialPageRoute(
-              builder: (context) => NewMeetingScreen(),
+              builder: (context) => const NewMeetingScreen(),
             );
+
           case '/join':
             //final args = settings.arguments as SecondPageArguments;
             return MaterialPageRoute(
-              builder: (context) => JoinScreen(),
+              builder: (context) => const JoinScreen(),
             );
+
           default:
-          //return MaterialPageRoute(builder: (context) => UndefinedPage(name: settings.name));
+            //return MaterialPageRoute(builder: (context) => UndefinedPage(name: settings.name));
+            return MaterialPageRoute(builder: (context) => const LoginScreen());
         }
       },
     );

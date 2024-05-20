@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:zoom/authentication/auth_service_implementation.dart';
+import 'package:zoom/meetiings/meeting_service_implementation.dart';
 
 class JoinScreen extends StatefulWidget {
   const JoinScreen({super.key});
@@ -11,6 +13,35 @@ class JoinScreen extends StatefulWidget {
 class _JoinScreenState extends State<JoinScreen> {
   bool _isVideoOn = false;
   bool _isAudioOn = false;
+
+  final AuthServiceImplementation authServiceImplementation =
+      AuthServiceImplementation();
+  late final TextEditingController idController;
+  late final TextEditingController nameController;
+  final MeetingServiceImplementation meetingServiceImplementation =
+      MeetingServiceImplementation();
+
+  @override
+  void initState() {
+    idController = TextEditingController();
+    nameController =
+        TextEditingController(text: authServiceImplementation.user.displayName);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    idController.dispose();
+    nameController.dispose();
+
+    super.dispose();
+  }
+
+  joinMeeting() {
+    meetingServiceImplementation.createMeeting(
+      idController.text,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +85,10 @@ class _JoinScreenState extends State<JoinScreen> {
                   ),
                 ],
               ),
-              child: const TextField(
+              child: TextField(
+                  controller: idController,
                   textAlign: TextAlign.center,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       hintText: 'Meeting ID',
                       hintStyle: TextStyle(
                         fontSize: 16,
@@ -80,19 +112,25 @@ class _JoinScreenState extends State<JoinScreen> {
                   ),
                 ],
               ),
-              child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Czar Basanal',
-                      style: TextStyle(fontSize: 16),
-                    )
-                  ]),
+              child: TextField(
+                  controller: nameController,
+                  textAlign: TextAlign.center,
+                  decoration: const InputDecoration(
+                      hintText: 'Name',
+                      hintStyle: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xFF6E6E6E),
+                      ),
+                      border:
+                          UnderlineInputBorder(borderSide: BorderSide.none))),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    joinMeeting();
+                  },
                   style: TextButton.styleFrom(
                       minimumSize: const Size(double.infinity, 0),
                       backgroundColor: const Color(0XFF1072ED),

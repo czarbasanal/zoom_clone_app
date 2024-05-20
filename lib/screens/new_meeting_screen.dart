@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:zoom/meetiings/meeting_service_implementation.dart';
 
 class NewMeetingScreen extends StatefulWidget {
   const NewMeetingScreen({super.key});
@@ -9,8 +12,17 @@ class NewMeetingScreen extends StatefulWidget {
 }
 
 class _NewMeetingScreenState extends State<NewMeetingScreen> {
-  bool _isVideoOn = false;
-  bool _isPMI = false;
+  bool isVideoOn = false;
+  bool isPMI = false;
+
+  final MeetingServiceImplementation _meetingServiceImplementation =
+      MeetingServiceImplementation();
+
+  void createNewMeeting() async {
+    var random = Random();
+    String roomName = (random.nextInt(10000000) + 10000000).toString();
+    _meetingServiceImplementation.createMeeting(roomName);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,10 +74,10 @@ class _NewMeetingScreenState extends State<NewMeetingScreen> {
                 ListTile(
                   title: const Text('Video on'),
                   trailing: CupertinoSwitch(
-                    value: _isVideoOn,
+                    value: isVideoOn,
                     onChanged: (bool value) {
                       setState(() {
-                        _isVideoOn = value;
+                        isVideoOn = value;
                       });
                     },
                     activeColor: CupertinoColors.activeGreen,
@@ -82,10 +94,10 @@ class _NewMeetingScreenState extends State<NewMeetingScreen> {
                   subtitle: const Text('286 541 3061'),
                   subtitleTextStyle: const TextStyle(color: Color(0xFF6E6E6E)),
                   trailing: CupertinoSwitch(
-                    value: _isPMI,
+                    value: isPMI,
                     onChanged: (bool value) {
                       setState(() {
-                        _isPMI = value;
+                        isPMI = value;
                       });
                     },
                     activeColor: CupertinoColors.activeGreen,
@@ -98,7 +110,9 @@ class _NewMeetingScreenState extends State<NewMeetingScreen> {
           Padding(
             padding: const EdgeInsets.all(24.0),
             child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  createNewMeeting();
+                },
                 style: TextButton.styleFrom(
                     minimumSize: const Size(double.infinity, 0),
                     backgroundColor: const Color(0XFF1072ED),

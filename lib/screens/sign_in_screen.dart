@@ -1,162 +1,180 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:zoom/utils/colors.dart';
-import 'package:zoom/widgets/apple_button.dart';
-import 'package:zoom/widgets/facebook_button.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:zoom/riverpod/providers.dart';
 import 'package:zoom/widgets/final_sign_in.dart';
 import 'package:zoom/widgets/google_button.dart';
 
-class SignInScreen extends StatelessWidget {
-  const SignInScreen({Key? key}) : super(key: key);
+class SignInScreen extends StatefulHookConsumerWidget {
+  const SignInScreen({super.key});
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _SignInScreenState();
+}
+
+class _SignInScreenState extends ConsumerState<SignInScreen> {
+  final TextEditingController emailEditingController = TextEditingController();
+  final TextEditingController passwordEditingController =
+      TextEditingController();
+
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    emailEditingController.dispose();
+    passwordEditingController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData.light().copyWith(
-        scaffoldBackgroundColor: tertiaryWhite,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
-        ),
-      ),
-      child: Scaffold(
+    final signInState = ref.watch(authNotifierProvider.notifier);
+
+    return Consumer(builder: (context, ref, child) {
+      return Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
-          flexibleSpace: Center(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 0.0),
-              child: Text(
-                'Sign In',
-                style: TextStyle(
-                  color: Color(0xFF1e1d25),
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
+          backgroundColor: Colors.white,
+          surfaceTintColor: Colors.white,
+          title: const Text('Sign in',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
+          centerTitle: true,
           leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Color(0xFF0094FF),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
+              icon: const Icon(
+                CupertinoIcons.chevron_left,
+                size: 30,
+              ),
+              color: const Color(0xFF1072ED),
+              onPressed: () {
+                Navigator.of(context).pop();
+              }),
         ),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        body: SingleChildScrollView(
+          child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 20),
-                const Text(
-                  'ENTER YOUR EMAIL ADDRESS',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFFBDBDBD),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    'ENTER YOUR EMAIL ADDRESS',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                      color: Color(0xFF6E6E6E),
+                    ),
                   ),
                 ),
                 SizedBox(height: 20),
-                const TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Email',
-                    filled: true,
-                    fillColor: Colors.white,
-                    isCollapsed: true,
-                    isDense: true,
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                    ),
-                    hintStyle: TextStyle(
-                      color: Color(0xFF8A8A8A),
-                    ),
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 12.0,
-                      horizontal: 165.0,
-                    ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.15),
+                        spreadRadius: 0.75,
+                        blurRadius: 0.5,
+                        offset: const Offset(1, 0.25),
+                      ),
+                    ],
                   ),
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                ),
-                SizedBox(height: 3),
-                const TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    hintText: 'Password',
-                    filled: true,
-                    fillColor: Colors.white,
-                    isCollapsed: true,
-                    isDense: true,
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                    ),
-                    hintStyle: TextStyle(
-                      color: Color(0xFF8A8A8A),
-                    ),
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 12.0,
-                      horizontal: 150.0,
-                    ),
-                  ),
-                  style: TextStyle(
-                    color: Colors.black,
+                  child: Column(
+                    children: [
+                      TextField(
+                          controller: emailEditingController,
+                          textAlign: TextAlign.center,
+                          decoration: const InputDecoration(
+                              hintText: 'Email',
+                              hintStyle: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.normal,
+                                color: Color(0xFF6E6E6E),
+                              ),
+                              border: UnderlineInputBorder(
+                                  borderSide: BorderSide.none))),
+                      Divider(
+                        height: 0,
+                        color: Colors.grey.withOpacity(0.2),
+                      ),
+                      TextField(
+                        controller: passwordEditingController,
+                        textAlign: TextAlign.center,
+                        decoration: const InputDecoration(
+                            hintText: 'Password',
+                            hintStyle: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                              color: Color(0xFF6E6E6E),
+                            ),
+                            border: UnderlineInputBorder(
+                                borderSide: BorderSide.none)),
+                        obscureText: true,
+                      )
+                    ],
                   ),
                 ),
                 SizedBox(height: 35),
                 Center(
                   child: FinalSignIn(
                     text: 'Sign in',
-                    onPressed: () {},
+                    onPressed: () async {
+                      await signInState.signIn(emailEditingController.text,
+                          passwordEditingController.text);
+                      Navigator.pushNamed(context, '/meetings');
+                    },
                   ),
                 ),
-                SizedBox(height: 20),
-                const Text(
-                  'Forgot password?',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF0094FF),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: TextButton(
+                      onPressed: () {},
+                      child: const Text('Forgot password?',
+                          style: TextStyle(
+                              color: Color(0xFF1072ED),
+                              fontWeight: FontWeight.bold))),
+                ),
+                const SizedBox(height: 24),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    'OTHER SIGN IN METHODS',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                      color: Color(0xFF6E6E6E),
+                    ),
                   ),
                 ),
-                SizedBox(height: 50),
-                const Text(
-                  'OTHER SIGN IN METHODS',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFFBDBDBD),
-                  ),
-                ),
-                SizedBox(height: 40),
+                SizedBox(height: 32),
                 Center(
-                  child: GoogleSignIn(
-                    text: 'Continue with Google',
-                    onPressed: () {},
-                  ),
-                ),
-                SizedBox(height: 20),
-                Center(
-                  child: AppleSignIn(
-                    text: 'Continue with Apple',
-                    onPressed: () {},
-                  ),
-                ),
-                SizedBox(height: 20),
-                Center(
-                  child: FacebookSignIn(
-                    text: 'Continue with Facebook',
-                    onPressed: () {},
-                  ),
-                ),
+                    child: GoogleSignIn(
+                  text: 'Continue with Google',
+                  onPressed: () async {
+                    setState(() {
+                      _isLoading = true;
+                    });
+
+                    try {
+                      await signInState.googleSignIn();
+                      Navigator.pushNamed(context, '/meetings');
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Failed to sign in: $e')),
+                      );
+                    } finally {
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    }
+                  },
+                )),
               ],
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

@@ -2,120 +2,194 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class TeamChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 15, 20, 20),
-            child: CupertinoTextField(
-              placeholder: 'Search',
-              placeholderStyle: TextStyle(
-                fontWeight: FontWeight.normal,
-                color: Color(0xFF6E6E6E),
-              ),
-              prefix: Padding(
-                padding: const EdgeInsets.fromLTRB(9.0, 6.0, 1.0, 6.0),
-                child: Icon(
-                  CupertinoIcons.search,
-                  color: Color(0xFF6e7681),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Text('Team Chat',
+            style: TextStyle(
+                fontSize: 18.0,
+                color: Colors.white,
+                fontWeight: FontWeight.w500)),
+        centerTitle: true,
+        backgroundColor: const Color(0xFF37384C),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(CupertinoIcons.add, color: Colors.white, size: 24),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 15, 20, 20),
+              child: CupertinoTextField(
+                placeholder: 'Search',
+                placeholderStyle: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  color: Color(0xFF6E6E6E),
+                ),
+                prefix: Padding(
+                  padding: const EdgeInsets.fromLTRB(9.0, 6.0, 1.0, 6.0),
+                  child: Icon(
+                    CupertinoIcons.search,
+                    color: Color(0xFF6e7681),
+                  ),
+                ),
+                decoration: BoxDecoration(
+                  color: Color(0xFFf1f0f5),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              decoration: BoxDecoration(
-                color: Color(0xFFf1f0f5),
-                borderRadius: BorderRadius.circular(8.0),
+            ),
+            Container(
+              height: 120.0,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: <Widget>[
+                  CupertinoIconButton(
+                      icon: CupertinoIcons.star_fill, label: 'Starred'),
+                  CupertinoIconButton(
+                      icon: CupertinoIcons.folder_fill, label: 'Folders'),
+                  CupertinoIconButton(
+                      icon: CupertinoIcons.at, label: 'Mentions'),
+                  CupertinoIconButton(
+                      icon: CupertinoIcons.arrow_up_right_square_fill,
+                      label: 'Drafts & S...'),
+                  CupertinoIconButton(
+                      icon: CupertinoIcons.bookmark_fill, label: 'Bookmarks'),
+                  CupertinoIconButton(
+                      icon: CupertinoIcons.news_solid, label: 'Files'),
+                  CupertinoIconButton(
+                      icon: CupertinoIcons.alarm_fill, label: 'Reminders'),
+                  CupertinoIconButton(
+                      icon: CupertinoIcons.person_add_solid,
+                      label: 'Contact R...'),
+                  CupertinoIconButton(
+                      icon: CupertinoIcons.gear_solid, label: 'Customize'),
+                ],
               ),
             ),
-          ),
-          Container(
-            height: 120.0,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: <Widget>[
-                CupertinoIconButton(
-                    icon: CupertinoIcons.star_fill, label: 'Starred'),
-                CupertinoIconButton(
-                    icon: CupertinoIcons.folder_fill, label: 'Folders'),
-                CupertinoIconButton(icon: CupertinoIcons.at, label: 'Mentions'),
-                CupertinoIconButton(
-                    icon: CupertinoIcons.arrow_up_right_square_fill,
-                    label: 'Drafts & S...'),
-                CupertinoIconButton(
-                    icon: CupertinoIcons.bookmark_fill, label: 'Bookmarks'),
-                CupertinoIconButton(
-                    icon: CupertinoIcons.news_solid, label: 'Files'),
-                CupertinoIconButton(
-                    icon: CupertinoIcons.alarm_fill, label: 'Reminders'),
-                CupertinoIconButton(
-                    icon: CupertinoIcons.person_add_solid,
-                    label: 'Contact R...'),
-                CupertinoIconButton(
-                    icon: CupertinoIcons.gear_solid, label: 'Customize'),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    "Messages"),
-                Icon(CupertinoIcons.line_horizontal_3_decrease),
-              ],
-            ),
-          ),
-          Container(
-            height: 50,
-            child: ListView(
-              children: <Widget>[
-                ListTile(
-                  title: Text('Czar Jay Basanal (you)'),
-                  leading: CircleAvatar(),
-                  onTap: () {},
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Image.asset(width: 200, height: 200, "assets/startChatting.png"),
-          SizedBox(
-            height: 20,
-          ),
-          Text("Find People and start chatting!"),
-          SizedBox(
-            height: 50,
-          ),
-          Center(
-            child: CupertinoButton(
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(CupertinoIcons.create, color: CupertinoColors.white),
-                  SizedBox(width: 10),
                   Text(
-                    'Start new chat',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: CupertinoColors.white,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      "Messages"),
+                  IconButton(
+                    onPressed: () => showCupertinoModalPopup(
+                        context: context, builder: createCupertinoActionSheet),
+                    icon: Icon(CupertinoIcons.line_horizontal_3_decrease),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              height: 50,
+              child: ListView(
+                children: <Widget>[
+                  ListTile(
+                    title: Text('Mexl Delver Tuba (you)'),
+                    leading: CircleAvatar(
+                      backgroundImage: AssetImage("assets/Zoom.png"),
                     ),
+                    onTap: () {},
                   ),
                 ],
               ),
-              color: CupertinoColors.activeBlue,
-              onPressed: () {
-                // TODO: Handle button press
-              },
             ),
-          )
-        ],
+            SizedBox(
+              height: 20,
+            ),
+            Image.asset(width: 200, height: 200, "assets/startChatting2.png"),
+            SizedBox(
+              height: 20,
+            ),
+            Text("Find People and start chatting!"),
+            SizedBox(
+              height: 30,
+            ),
+            Center(
+              child: CupertinoButton(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(CupertinoIcons.create, color: CupertinoColors.white),
+                      SizedBox(width: 10),
+                      Text(
+                        'Add Contacts',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: CupertinoColors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                  color: CupertinoColors.activeBlue,
+                  onPressed: () {
+                    showCupertinoDialog(
+                        context: context,
+                        builder: (context) => CupertinoAlertDialog(
+                              title: Text("Add Contacts"),
+                              content: Column(
+                                children: <Widget>[
+                                  SizedBox(height: 16),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "By email address",
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            color: CupertinoColors.activeBlue,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 25),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "From phone contacts",
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            color: CupertinoColors.activeBlue,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              actions: <Widget>[
+                                CupertinoDialogAction(
+                                  child: Text('Cancel'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            ));
+                  }),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -152,4 +226,41 @@ class TeamChatScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget createCupertinoActionSheet(BuildContext context) {
+  return CupertinoActionSheet(
+    actions: <CupertinoActionSheetAction>[
+      CupertinoActionSheetAction(
+        child: Text('Mentions'),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+      CupertinoActionSheetAction(
+        child: Text('Direct messages'),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+      CupertinoActionSheetAction(
+        child: Text('Unread'),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+      CupertinoActionSheetAction(
+        child: Text('Muted'),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+    ],
+    cancelButton: CupertinoActionSheetAction(
+      child: Text('Cancel'),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    ),
+  );
 }
