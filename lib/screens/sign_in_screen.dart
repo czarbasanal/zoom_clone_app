@@ -120,7 +120,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           ref
               .read(authNotifierProvider.notifier)
               .signIn(emailEditingController.text.trim(),
-                  passwordEditingController.text.trim(), ref, context)
+                  passwordEditingController.text.trim(), ref)
               .then((_) {
             ref.read(loadingProvider.notifier).state = false;
             Navigator.pushAndRemoveUntil(

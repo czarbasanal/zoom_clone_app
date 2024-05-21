@@ -40,7 +40,6 @@ class MyApp extends ConsumerWidget {
       home: authenticationState.when(
         data: (data) {
           if (data != null) {
-            // Delay setting the user state
             Future.microtask(() {
               ref.read(userProvider.notifier).setUser(
                     custom_user.User(
