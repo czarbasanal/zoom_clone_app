@@ -40,4 +40,8 @@ class ContactsNotifier extends StateNotifier<List<Contact>> {
       print('Contact added: ${contact.email}');
     }
   }
+
+  void reset() {
+    state = [];
+  }
 }

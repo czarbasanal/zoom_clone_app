@@ -39,3 +39,5 @@ final authStateProvider = StreamProvider((ref) {
   final authState = ref.watch(authNotifierProvider.notifier);
   return authState.authStateChange;
 });
+
+final loadingProvider = StateProvider<bool>((ref) => false);

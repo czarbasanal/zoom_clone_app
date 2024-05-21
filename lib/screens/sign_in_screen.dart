@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:zoom/riverpod/providers.dart';
 import 'package:zoom/widgets/final_sign_in.dart';
 import 'package:zoom/widgets/google_button.dart';
+import 'package:zoom/widgets/main_bottom_navigation.dart';
 
 class SignInScreen extends StatefulHookConsumerWidget {
   const SignInScreen({super.key});
@@ -119,9 +120,29 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   child: FinalSignIn(
                     text: 'Sign in',
                     onPressed: () async {
-                      await signInState.signIn(emailEditingController.text,
-                          passwordEditingController.text, ref);
-                      Navigator.pushNamed(context, '/meetings');
+                      setState(() {
+                        _isLoading = true;
+                      });
+
+                      try {
+                        await signInState.signIn(emailEditingController.text,
+                            passwordEditingController.text, ref);
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const MainBottomNavigation()),
+                          (Route<dynamic> route) => false,
+                        );
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Failed to sign in: $e')),
+                        );
+                      } finally {
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      }
                     },
                   ),
                 ),
@@ -158,7 +179,12 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
 
                     try {
                       await signInState.googleSignIn(context, ref);
-                      Navigator.pushNamed(context, '/meetings');
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MainBottomNavigation()),
+                        (Route<dynamic> route) => false,
+                      );
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Failed to sign in: $e')),

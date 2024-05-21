@@ -122,7 +122,6 @@ class AuthServiceImplementation implements AuthService {
             'photoURL': user.photoURL,
             'pmi': pmi,
           });
-          // Initialize empty subcollections for contacts and conversations
           await _firebaseFirestore
               .collection('UserCollection')
               .doc(user.uid)
