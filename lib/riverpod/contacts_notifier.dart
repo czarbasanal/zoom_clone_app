@@ -8,38 +8,66 @@ class ContactsNotifier extends StateNotifier<List<Contact>> {
 
   ContactsNotifier(this.ref) : super([]);
 
-  Future<void> loadContacts() async {
+  Stream<void> loadContacts() {
     final user = ref.read(userProvider);
     if (user != null) {
-      final querySnapshot = await FirebaseFirestore.instance
+      return FirebaseFirestore.instance
           .collection('UserCollection')
           .doc(user.id)
           .collection('contacts')
-          .get();
-
-      final contacts = querySnapshot.docs.map((doc) {
-        return Contact.fromMap(doc.id, doc.data());
-      }).toList();
-
-      state = contacts;
-      // print('Loaded contacts: ${contacts.length}');
+          .snapshots()
+          .map((snapshot) {
+        final contacts = snapshot.docs.map((doc) {
+          return Contact.fromMap(doc.id, doc.data());
+        }).toList();
+        state = contacts;
+        print('Loaded contacts: ${contacts.length}');
+      });
     } else {
       print('No user ID found');
+      return Stream.value(null);
     }
   }
 
-  Future<void> addContact(Contact contact) async {
+  Future<void> addContact(String email) async {
     final user = ref.read(userProvider);
     if (user != null) {
-      await FirebaseFirestore.instance
+      // Find the contact's document by email
+      final contactQuerySnapshot = await FirebaseFirestore.instance
           .collection('UserCollection')
-          .doc(user.id)
-          .collection('contacts')
-          .doc(contact.id)
-          .set(contact.toMap());
+          .where('email', isEqualTo: email)
+          .get();
 
-      state = [...state, contact];
-      print('Contact added: ${contact.email}');
+      if (contactQuerySnapshot.docs.isNotEmpty) {
+        final contactDoc = contactQuerySnapshot.docs.first;
+        final contactData = contactDoc.data();
+        final contact = Contact.fromMap(contactDoc.id, contactData);
+
+        // Add the contact to the current user's contacts subcollection
+        await FirebaseFirestore.instance
+            .collection('UserCollection')
+            .doc(user.id)
+            .collection('contacts')
+            .doc(contact.id)
+            .set(contact.toMap());
+
+        // Add the current user to the contact's contacts subcollection
+        await FirebaseFirestore.instance
+            .collection('UserCollection')
+            .doc(contact.id)
+            .collection('contacts')
+            .doc(user.id)
+            .set({
+          'email': user.email,
+          'name': user.name,
+          'photoURL': user.photoURL,
+        });
+
+        state = [...state, contact];
+        print('Contact added: ${contact.email}');
+      } else {
+        print('Contact not found: $email');
+      }
     } else {
       print('No user ID found');
     }

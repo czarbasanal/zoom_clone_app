@@ -14,6 +14,11 @@ final userProvider = StateNotifierProvider<UserNotifier, custom_user.User?>(
 
 final contactsProvider = StateNotifierProvider<ContactsNotifier, List<Contact>>(
     (ref) => ContactsNotifier(ref));
+
+final contactsStreamProvider = StreamProvider<void>((ref) {
+  return ref.watch(contactsProvider.notifier).loadContacts();
+});
+
 final conversationsProvider =
     StateNotifierProvider<ConversationsNotifier, List<Conversation>>(
         (ref) => ConversationsNotifier(ref));

@@ -25,22 +25,8 @@ class AddContactScreen extends ConsumerWidget {
               onPressed: () async {
                 final email = _emailController.text;
                 if (email.isNotEmpty) {
-                  final user = ref.read(userProvider);
-                  if (user != null) {
-                    final contact = Contact(
-                      id: email,
-                      email: email,
-                      name:
-                          'User Name', // You can fetch and set the actual name from Firestore if needed
-                      photoURL: '',
-                    );
-                    await ref
-                        .read(contactsProvider.notifier)
-                        .addContact(contact);
-                    Navigator.pop(context);
-                  } else {
-                    print('No user logged in');
-                  }
+                  await ref.read(contactsProvider.notifier).addContact(email);
+                  Navigator.pop(context);
                 }
               },
               child: Text('Add Contact'),
