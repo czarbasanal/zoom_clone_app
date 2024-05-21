@@ -46,13 +46,14 @@ class AuthServiceImplementation implements AuthService {
             'photoURL': user.photoURL,
             'pmi': pmi,
           });
-          // Initialize empty subcollections for contacts and conversations
+
           await _firebaseFirestore
               .collection('UserCollection')
               .doc(user.uid)
               .collection('contacts')
               .doc('dummy')
               .set({});
+
           await _firebaseFirestore
               .collection('UserCollection')
               .doc(user.uid)
@@ -60,7 +61,7 @@ class AuthServiceImplementation implements AuthService {
               .doc('dummy')
               .set({});
         }
-        // Set the user in the userProvider
+
         ref.read(userProvider.notifier).setUser(
               custom_user.User(
                 id: user.uid,
@@ -121,13 +122,14 @@ class AuthServiceImplementation implements AuthService {
             'photoURL': user.photoURL,
             'pmi': pmi,
           });
-          // Initialize empty subcollections for contacts and conversations
+
           await _firebaseFirestore
               .collection('UserCollection')
               .doc(user.uid)
               .collection('contacts')
               .doc('dummy')
               .set({});
+
           await _firebaseFirestore
               .collection('UserCollection')
               .doc(user.uid)
@@ -135,7 +137,7 @@ class AuthServiceImplementation implements AuthService {
               .doc('dummy')
               .set({});
         }
-        // Set the user in the userProvider
+
         ref.read(userProvider.notifier).setUser(
               custom_user.User(
                 id: user.uid,

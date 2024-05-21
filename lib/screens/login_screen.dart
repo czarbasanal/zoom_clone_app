@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zoom/utils/colors.dart';
 import 'package:zoom/utils/screen_size.dart';
-import 'package:zoom/utils/screen_size.dart';
 import 'package:zoom/widgets/bottom_rounded_container.dart';
 
 class LoginScreen extends StatelessWidget {

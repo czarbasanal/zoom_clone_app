@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:zoom/riverpod/providers.dart';
 import 'package:zoom/widgets/final_sign_up.dart';
 import 'package:zoom/widgets/google_button.dart';
-import 'package:zoom/widgets/main_bottom_navigation.dart';
 
 class SignUpScreen extends StatefulHookConsumerWidget {
   const SignUpScreen({super.key});
@@ -45,10 +44,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           ref,
         );
       }
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MainBottomNavigation()),
-      );
+      Navigator.pushNamed(context, '/sign_in');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to sign up: $e')),
@@ -61,7 +57,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, child) {
-      final _isLoading = ref.watch(loadingProvider);
+      final isLoading = ref.watch(loadingProvider);
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -97,7 +93,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 ),
               ),
             ),
-            if (_isLoading)
+            if (isLoading)
               const Positioned.fill(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
