@@ -40,8 +40,9 @@ class AuthNotifier extends StateNotifier<bool> {
     ref.read(conversationsProvider.notifier).reset();
   }
 
-  Future<void> signIn(String email, String password, WidgetRef ref) async {
-    await _authService.signIn(email, password, ref);
+  Future<void> signIn(String email, String password, WidgetRef ref,
+      BuildContext context) async {
+    await _authService.signIn(email, password, ref, context);
     state = true;
   }
 
