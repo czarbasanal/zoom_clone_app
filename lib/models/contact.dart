@@ -14,8 +14,8 @@ class Contact {
   factory Contact.fromMap(String id, Map<String, dynamic> data) {
     return Contact(
       id: id,
-      email: data['email'] ?? 'unknown',
-      name: data['name'] ?? 'unknown',
+      email: data['email'] ?? 'You',
+      name: data['name'] ?? 'Just You',
       photoURL: data['photoURL'] ?? '',
     );
   }

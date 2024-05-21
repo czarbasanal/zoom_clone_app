@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:zoom/models/message.dart';
-import 'providers.dart';
+import 'package:zoom/riverpod/providers.dart';
+import '../models/message.dart';
 
 class MessagesNotifier extends StateNotifier<List<Message>> {
   final Ref ref;

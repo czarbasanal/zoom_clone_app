@@ -121,6 +121,9 @@ class TeamChatScreen extends ConsumerWidget {
                           itemBuilder: (context, index) {
                             final contact = contacts[index];
                             return ListTile(
+                              leading: CircleAvatar(
+                                backgroundImage: NetworkImage(contact.photoURL),
+                              ),
                               title: Text(contact.name),
                               subtitle: Text(contact.email),
                               onTap: () {
@@ -138,13 +141,6 @@ class TeamChatScreen extends ConsumerWidget {
                 ),
                 SizedBox(
                   height: 20,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text("Find People and start chatting!"),
-                SizedBox(
-                  height: 30,
                 ),
                 Center(
                   child: CupertinoButton(

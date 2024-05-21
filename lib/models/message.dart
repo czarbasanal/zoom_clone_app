@@ -6,16 +6,17 @@ class Message {
   final String message;
   final DateTime timestamp;
 
-  Message(
-      {required this.id,
-      required this.senderId,
-      required this.message,
-      required this.timestamp});
+  Message({
+    required this.id,
+    required this.senderId,
+    required this.message,
+    required this.timestamp,
+  });
 
   factory Message.fromMap(String id, Map<String, dynamic> data) {
     return Message(
       id: id,
-      senderId: data['sender_id'],
+      senderId: data['senderId'],
       message: data['message'],
       timestamp: (data['timestamp'] as Timestamp).toDate(),
     );
@@ -23,7 +24,7 @@ class Message {
 
   Map<String, dynamic> toMap() {
     return {
-      'sender_id': senderId,
+      'senderId': senderId,
       'message': message,
       'timestamp': Timestamp.fromDate(timestamp),
     };

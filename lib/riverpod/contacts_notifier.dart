@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:zoom/riverpod/providers.dart';
 import '../models/contact.dart';
-import 'providers.dart';
 
 class ContactsNotifier extends StateNotifier<List<Contact>> {
   final Ref ref;
@@ -43,6 +43,9 @@ class ContactsNotifier extends StateNotifier<List<Contact>> {
         final contactData = contactDoc.data();
         final contact = Contact.fromMap(contactDoc.id, contactData);
 
+        // Create a shared conversation ID
+        final conversationId = _createConversationId(user.id, contact.id);
+
         // Add the contact to the current user's contacts subcollection
         await FirebaseFirestore.instance
             .collection('UserCollection')
@@ -50,6 +53,14 @@ class ContactsNotifier extends StateNotifier<List<Contact>> {
             .collection('contacts')
             .doc(contact.id)
             .set(contact.toMap());
+
+        // Add the conversation ID to the current user's conversations
+        await FirebaseFirestore.instance
+            .collection('UserCollection')
+            .doc(user.id)
+            .collection('conversations')
+            .doc(conversationId)
+            .set({'contactId': contact.id});
 
         // Add the current user to the contact's contacts subcollection
         await FirebaseFirestore.instance
@@ -63,6 +74,14 @@ class ContactsNotifier extends StateNotifier<List<Contact>> {
           'photoURL': user.photoURL,
         });
 
+        // Add the conversation ID to the contact's conversations
+        await FirebaseFirestore.instance
+            .collection('UserCollection')
+            .doc(contact.id)
+            .collection('conversations')
+            .doc(conversationId)
+            .set({'contactId': user.id});
+
         state = [...state, contact];
         print('Contact added: ${contact.email}');
       } else {
@@ -71,5 +90,12 @@ class ContactsNotifier extends StateNotifier<List<Contact>> {
     } else {
       print('No user ID found');
     }
+  }
+
+  String _createConversationId(String userId1, String userId2) {
+    // Ensure consistent conversation ID order
+    return userId1.compareTo(userId2) < 0
+        ? '$userId1-$userId2'
+        : '$userId2-$userId1';
   }
 }
