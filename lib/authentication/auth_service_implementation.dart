@@ -7,6 +7,7 @@ import 'package:zoom/authentication/auth_service.dart';
 import 'package:zoom/utils/utils.dart';
 import '../models/user.dart' as custom_user;
 import '../riverpod/providers.dart';
+import 'dart:math';
 
 class AuthServiceImplementation implements AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -35,6 +36,7 @@ class AuthServiceImplementation implements AuthService {
 
       if (user != null) {
         if (userCredential.additionalUserInfo!.isNewUser) {
+          String pmi = _generatePMI();
           await _firebaseFirestore
               .collection('UserCollection')
               .doc(user.uid)
@@ -42,6 +44,7 @@ class AuthServiceImplementation implements AuthService {
             'name': user.displayName,
             'email': user.email,
             'photoURL': user.photoURL,
+            'pmi': pmi,
           });
           // Initialize empty subcollections for contacts and conversations
           await _firebaseFirestore
@@ -81,11 +84,8 @@ class AuthServiceImplementation implements AuthService {
   @override
   Future<void> signIn(String email, String password, WidgetRef ref) async {
     try {
-      UserCredential userCredential =
-          await _firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      UserCredential userCredential = await _firebaseAuth
+          .signInWithEmailAndPassword(email: email, password: password);
       User? user = userCredential.user;
       if (user != null) {
         // Set the user in the userProvider
@@ -106,15 +106,13 @@ class AuthServiceImplementation implements AuthService {
   @override
   Future<void> signUp(String email, String password, WidgetRef ref) async {
     try {
-      UserCredential userCredential =
-          await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      UserCredential userCredential = await _firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: password);
 
       User? user = userCredential.user;
       if (user != null) {
         if (userCredential.additionalUserInfo!.isNewUser) {
+          String pmi = _generatePMI();
           await _firebaseFirestore
               .collection('UserCollection')
               .doc(user.uid)
@@ -122,6 +120,7 @@ class AuthServiceImplementation implements AuthService {
             'name': user.displayName,
             'email': user.email,
             'photoURL': user.photoURL,
+            'pmi': pmi,
           });
           // Initialize empty subcollections for contacts and conversations
           await _firebaseFirestore
@@ -150,5 +149,10 @@ class AuthServiceImplementation implements AuthService {
     } on FirebaseAuthException catch (e) {
       e.message.toString();
     }
+  }
+
+  String _generatePMI() {
+    return (Random().nextInt(90000000) + 10000000)
+        .toString(); // Generates an 8-digit PMI
   }
 }

@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:zoom/authentication/auth_service_implementation.dart';
 import 'package:zoom/meetiings/meeting_service_implementation.dart';
 
 class NewMeetingScreen extends StatefulWidget {
@@ -14,13 +16,52 @@ class NewMeetingScreen extends StatefulWidget {
 class _NewMeetingScreenState extends State<NewMeetingScreen> {
   bool isVideoOn = false;
   bool isPMI = false;
+  String pmi = '';
 
   final MeetingServiceImplementation _meetingServiceImplementation =
       MeetingServiceImplementation();
+  final AuthServiceImplementation _authServiceImplementation =
+      AuthServiceImplementation();
+
+  @override
+  void initState() {
+    super.initState();
+    _retrievePMIFromFirestore(); // Call the method to retrieve PMI from Firestore
+  }
+
+  void _retrievePMIFromFirestore() async {
+    String userId = _authServiceImplementation.user.uid;
+    try {
+      // Retrieve PMI from Firestore
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
+          .collection('UserCollection')
+          .doc(userId)
+          .get();
+
+      if (snapshot.exists) {
+        setState(() {
+          pmi = snapshot.get('pmi') ?? '';
+        });
+      } else {
+        print('No PMI found for user');
+      }
+    } catch (e) {
+      print("Error retrieving PMI: $e");
+      // Handle error if necessary
+    }
+  }
 
   void createNewMeeting() async {
     var random = Random();
-    String roomName = (random.nextInt(10000000) + 10000000).toString();
+    String roomName;
+
+    if (isPMI) {
+      roomName = pmi;
+    } else {
+      roomName = (random.nextInt(10000000) + 10000000).toString();
+    }
+
     _meetingServiceImplementation.createMeeting(roomName);
   }
 
@@ -91,7 +132,7 @@ class _NewMeetingScreenState extends State<NewMeetingScreen> {
                 ),
                 ListTile(
                   title: const Text('Use personal meeting ID (PMI)'),
-                  subtitle: const Text('286 541 3061'),
+                  subtitle: Text(pmi),
                   subtitleTextStyle: const TextStyle(color: Color(0xFF6E6E6E)),
                   trailing: CupertinoSwitch(
                     value: isPMI,
