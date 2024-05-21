@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zoom/utils/colors.dart';
+import 'package:zoom/utils/screen_size.dart';
 import 'package:zoom/widgets/bottom_rounded_container.dart';
-import 'package:zoom/widgets/custom_button.dart';
-import 'package:zoom/widgets/sign_in_button.dart';
-import 'package:zoom/widgets/sign_up_button.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -17,10 +15,10 @@ class LoginScreen extends StatelessWidget {
       child: Scaffold(
         body: Stack(
           children: [
-            const BottomRoundedContainer(
-              height: 350.0,
+            BottomRoundedContainer(
+              height: screenHeight(context) * 0.38,
               color: Colors.white,
-              borderRadius: 24.0,
+              borderRadius: screenWidth(context) * 0.055,
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -30,12 +28,11 @@ class LoginScreen extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const SizedBox(height: 300),
                         Image.asset(
-                          'assets/images/zoom_white_logo.png',
-                          width: 140,
+                          'assets/images/zoom_new_logo_white.png',
+                          width: screenWidth(context) * 0.7,
                         ),
-                        const SizedBox(height: 215),
+                        SizedBox(height: screenHeight(context) * 0.22)
                       ],
                     ),
                   ),
