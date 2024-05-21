@@ -36,11 +36,10 @@ class MyApp extends ConsumerWidget {
           useMaterial3: true,
           splashColor: Colors.transparent,
           colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1072ED))
-              .copyWith(background: tertiaryWhite)),
+              .copyWith(surface: tertiaryWhite)),
       home: authenticationState.when(
         data: (data) {
           if (data != null) {
-            // Delay setting the user state
             Future.microtask(() {
               ref.read(userProvider.notifier).setUser(
                     custom_user.User(

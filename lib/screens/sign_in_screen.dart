@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:zoom/riverpod/providers.dart';
 import 'package:zoom/widgets/final_sign_in.dart';
 import 'package:zoom/widgets/google_button.dart';
+import 'package:zoom/widgets/main_bottom_navigation.dart';
 
 class SignInScreen extends StatefulHookConsumerWidget {
   const SignInScreen({super.key});
@@ -17,8 +18,6 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   final TextEditingController passwordEditingController =
       TextEditingController();
 
-  bool _isLoading = false;
-
   @override
   void dispose() {
     emailEditingController.dispose();
@@ -28,153 +27,187 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final signInState = ref.watch(authNotifierProvider.notifier);
+    final isLoading = ref.watch(loadingProvider);
 
-    return Consumer(builder: (context, ref, child) {
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          surfaceTintColor: Colors.white,
-          title: const Text('Sign in',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
-          centerTitle: true,
-          leading: IconButton(
-              icon: const Icon(
-                CupertinoIcons.chevron_left,
-                size: 30,
-              ),
-              color: const Color(0xFF1072ED),
-              onPressed: () {
-                Navigator.of(context).pop();
-              }),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        title: const Text('Sign in',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(CupertinoIcons.chevron_left, size: 30),
+          color: const Color(0xFF1072ED),
+          onPressed: () => Navigator.of(context).pop(),
         ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 20),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    'ENTER YOUR EMAIL ADDRESS',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.normal,
-                      color: Color(0xFF6E6E6E),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.15),
-                        spreadRadius: 0.75,
-                        blurRadius: 0.5,
-                        offset: const Offset(1, 0.25),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      TextField(
-                          controller: emailEditingController,
-                          textAlign: TextAlign.center,
-                          decoration: const InputDecoration(
-                              hintText: 'Email',
-                              hintStyle: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.normal,
-                                color: Color(0xFF6E6E6E),
-                              ),
-                              border: UnderlineInputBorder(
-                                  borderSide: BorderSide.none))),
-                      Divider(
-                        height: 0,
-                        color: Colors.grey.withOpacity(0.2),
-                      ),
-                      TextField(
-                        controller: passwordEditingController,
-                        textAlign: TextAlign.center,
-                        decoration: const InputDecoration(
-                            hintText: 'Password',
-                            hintStyle: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                              color: Color(0xFF6E6E6E),
-                            ),
-                            border: UnderlineInputBorder(
-                                borderSide: BorderSide.none)),
-                        obscureText: true,
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 35),
-                Center(
-                  child: FinalSignIn(
-                    text: 'Sign in',
-                    onPressed: () async {
-                      await signInState.signIn(emailEditingController.text,
-                          passwordEditingController.text, ref);
-                      Navigator.pushNamed(context, '/meetings');
-                    },
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: TextButton(
-                      onPressed: () {},
-                      child: const Text('Forgot password?',
-                          style: TextStyle(
-                              color: Color(0xFF1072ED),
-                              fontWeight: FontWeight.bold))),
-                ),
-                const SizedBox(height: 24),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    'OTHER SIGN IN METHODS',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.normal,
-                      color: Color(0xFF6E6E6E),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 32),
-                Center(
-                    child: GoogleSignIn(
-                  text: 'Continue with Google',
-                  onPressed: () async {
-                    setState(() {
-                      _isLoading = true;
-                    });
-
-                    try {
-                      await signInState.googleSignIn(context, ref);
-                      Navigator.pushNamed(context, '/meetings');
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Failed to sign in: $e')),
-                      );
-                    } finally {
-                      setState(() {
-                        _isLoading = false;
-                      });
-                    }
-                  },
-                )),
-              ],
-            ),
+      ),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 20),
+              buildEmailPasswordInput(),
+              SizedBox(height: 35),
+              if (isLoading) const CircularProgressIndicator(),
+              buildSignInButton(context),
+              buildForgotPasswordButton(),
+              SizedBox(height: 20),
+              buildOtherSignInMethodsLabel(),
+              SizedBox(height: 20),
+              buildGoogleSignInButton(context),
+            ],
           ),
         ),
-      );
-    });
+      ),
+    );
+  }
+
+  Widget buildEmailPasswordInput() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.15),
+            spreadRadius: 0.75,
+            blurRadius: 0.5,
+            offset: const Offset(1, 0.25),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          TextField(
+            controller: emailEditingController,
+            textAlign: TextAlign.center,
+            decoration: const InputDecoration(
+              hintText: 'Email',
+              hintStyle: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.normal,
+                  color: Color(0xFF6E6E6E)),
+              border: UnderlineInputBorder(borderSide: BorderSide.none),
+            ),
+          ),
+          Divider(height: 0, color: Colors.grey.withOpacity(0.2)),
+          TextField(
+            controller: passwordEditingController,
+            textAlign: TextAlign.center,
+            obscureText: true,
+            decoration: const InputDecoration(
+              hintText: 'Password',
+              hintStyle: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.normal,
+                  color: Color(0xFF6E6E6E)),
+              border: UnderlineInputBorder(borderSide: BorderSide.none),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildSignInButton(BuildContext context) {
+    return FinalSignIn(
+      text: 'Sign in',
+      onPressed: () {
+        if (_validateInputs()) {
+          ref.read(loadingProvider.notifier).state = true;
+          ref
+              .read(authNotifierProvider.notifier)
+              .signIn(emailEditingController.text.trim(),
+                  passwordEditingController.text.trim(), ref)
+              .then((_) {
+            ref.read(loadingProvider.notifier).state = false;
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const MainBottomNavigation()),
+              (Route<dynamic> route) => false,
+            );
+          }).catchError((e) {
+            ref.read(loadingProvider.notifier).state = false;
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text('Failed to sign in: $e')));
+          });
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Please enter email and password')));
+        }
+      },
+    );
+  }
+
+  bool _validateInputs() {
+    final email = emailEditingController.text.trim();
+    final password = passwordEditingController.text.trim();
+    if (email.isEmpty || password.isEmpty) {
+      return false;
+    }
+    return true;
+  }
+
+  Widget buildForgotPasswordButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: TextButton(
+            onPressed: () {},
+            child: const Text('Forgot password?',
+                style: TextStyle(
+                    color: Color(0xFF1072ED), fontWeight: FontWeight.w500)),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildOtherSignInMethodsLabel() {
+    return const Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            'OTHER SIGN IN METHODS',
+            style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+                color: Color(0xFF6E6E6E)),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildGoogleSignInButton(BuildContext context) {
+    return GoogleSignIn(
+      text: 'Continue with Google',
+      onPressed: () {
+        ref.read(loadingProvider.notifier).state = true;
+        ref
+            .read(authNotifierProvider.notifier)
+            .googleSignIn(context, ref)
+            .then((_) {
+          ref.read(loadingProvider.notifier).state = false;
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const MainBottomNavigation()),
+            (Route<dynamic> route) => false,
+          );
+        }).catchError((e) {
+          ref.read(loadingProvider.notifier).state = false;
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Failed to sign in with Google: $e')));
+        });
+      },
+    );
   }
 }

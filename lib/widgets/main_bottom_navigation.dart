@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zoom/authentication/auth_service_implementation.dart';
+import 'package:zoom/riverpod/providers.dart';
+import 'package:zoom/screens/calendar_screen.dart';
+import 'package:zoom/screens/mail_screen.dart';
 import 'package:zoom/screens/meetings_screen.dart';
 import 'package:zoom/screens/team_chat_screen.dart';
 import 'package:zoom/widgets/logout_button.dart';
@@ -18,13 +20,19 @@ class _MainBottomNavigationState extends ConsumerState<MainBottomNavigation> {
 
   @override
   Widget build(BuildContext context) {
-    final authService = AuthServiceImplementation();
     final List<Widget> pages = [
       const MeetingScreen(),
       TeamChatScreen(),
-      const Text('This is a Mail Screen'),
-      const Text('This is a Calendar Screen'),
-      LogoutButton(text: 'Logout', onPressed: () => authService.logOut(ref))
+      const MailScreen(),
+      const CalendarScreen(),
+      LogoutButton(
+          text: 'Logout',
+          onPressed: () {
+            final authNotifier = ref.read(authNotifierProvider.notifier);
+            authNotifier.signOut(ref);
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                '/login', (Route<dynamic> route) => false);
+          })
     ];
 
     return Scaffold(
@@ -38,6 +46,8 @@ class _MainBottomNavigationState extends ConsumerState<MainBottomNavigation> {
             });
           },
           selectedFontSize: 12,
+          selectedIconTheme: const IconThemeData(color: Color(0xFF1072ED)),
+          selectedLabelStyle: const TextStyle(color: Color(0xFF1072ED)),
           backgroundColor: const Color(0xFFFAFAFA),
           elevation: 1,
           type: BottomNavigationBarType.fixed,

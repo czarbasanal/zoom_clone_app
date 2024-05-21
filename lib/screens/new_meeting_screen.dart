@@ -1,20 +1,20 @@
 import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:zoom/authentication/auth_service_implementation.dart';
 import 'package:zoom/meetiings/meeting_service_implementation.dart';
+import 'package:zoom/riverpod/providers.dart';
 
-class NewMeetingScreen extends StatefulWidget {
+class NewMeetingScreen extends StatefulHookConsumerWidget {
   const NewMeetingScreen({super.key});
 
   @override
   _NewMeetingScreenState createState() => _NewMeetingScreenState();
 }
 
-class _NewMeetingScreenState extends State<NewMeetingScreen> {
-  bool isVideoOn = false;
+class _NewMeetingScreenState extends ConsumerState<NewMeetingScreen> {
   bool isPMI = false;
   String pmi = '';
 
@@ -26,13 +26,12 @@ class _NewMeetingScreenState extends State<NewMeetingScreen> {
   @override
   void initState() {
     super.initState();
-    _retrievePMIFromFirestore(); // Call the method to retrieve PMI from Firestore
+    _retrievePMIFromFirestore();
   }
 
   void _retrievePMIFromFirestore() async {
     String userId = _authServiceImplementation.user.uid;
     try {
-      // Retrieve PMI from Firestore
       DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
           .instance
           .collection('UserCollection')
@@ -62,11 +61,16 @@ class _NewMeetingScreenState extends State<NewMeetingScreen> {
       roomName = (random.nextInt(10000000) + 10000000).toString();
     }
 
-    _meetingServiceImplementation.createMeeting(roomName);
+    bool isVideoOn = ref.read(videoOnProvider);
+    bool isAudioOn = ref.read(audioOnProvider);
+
+    _meetingServiceImplementation.createMeeting(roomName, isAudioOn, isVideoOn);
   }
 
   @override
   Widget build(BuildContext context) {
+    final isVideoOn = ref.watch(videoOnProvider);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 1.0,
@@ -117,9 +121,7 @@ class _NewMeetingScreenState extends State<NewMeetingScreen> {
                   trailing: CupertinoSwitch(
                     value: isVideoOn,
                     onChanged: (bool value) {
-                      setState(() {
-                        isVideoOn = value;
-                      });
+                      ref.read(videoOnProvider.notifier).state = value;
                     },
                     activeColor: CupertinoColors.activeGreen,
                   ),

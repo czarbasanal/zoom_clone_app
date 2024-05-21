@@ -37,4 +37,8 @@ class ConversationsNotifier extends StateNotifier<List<Conversation>> {
       state = [...state, conversation];
     }
   }
+
+  void reset() {
+    state = [];
+  }
 }

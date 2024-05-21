@@ -47,47 +47,68 @@ class AuthNotifier extends StateNotifier<bool> {
     await _authService.logOut(ref);
     ref.read(userProvider.notifier).clearUser();
     state = false;
+    ref.invalidate(userProvider);
+    ref.invalidate(userProvider);
+    ref.invalidate(contactsProvider);
+    ref.invalidate(conversationsProvider);
+    ref.read(contactsProvider.notifier).reset();
+    ref.read(conversationsProvider.notifier).reset();
   }
 
   Future<void> signIn(String email, String password, WidgetRef ref) async {
-    await _authService.signIn(email, password, ref);
-    final user = _authService.user;
-    ref.read(userProvider.notifier).setUser(
-          custom_user.User(
-            id: user.uid,
-            email: user.email!,
-            name: user.displayName!,
-            photoURL: user.photoURL!,
-          ),
-        );
-    state = true;
+    try {
+      await _authService.signIn(email, password, ref);
+      final user = _authService.user;
+      ref.read(userProvider.notifier).setUser(
+            custom_user.User(
+              id: user.uid,
+              email: user.email!,
+              name: user.displayName!,
+              photoURL: user.photoURL!,
+            ),
+          );
+      state = true;
+    } catch (e) {
+      state = false;
+      throw Exception('Failed to sign in: $e');
+    }
   }
 
   Future<void> googleSignIn(BuildContext context, WidgetRef ref) async {
-    await _authService.signInWithGoogle(context, ref);
-    final user = _authService.user;
-    ref.read(userProvider.notifier).setUser(
-          custom_user.User(
-            id: user.uid,
-            email: user.email!,
-            name: user.displayName!,
-            photoURL: user.photoURL!,
-          ),
-        );
-    state = true;
+    try {
+      await _authService.signInWithGoogle(context, ref);
+      final user = _authService.user;
+      ref.read(userProvider.notifier).setUser(
+            custom_user.User(
+              id: user.uid,
+              email: user.email!,
+              name: user.displayName!,
+              photoURL: user.photoURL!,
+            ),
+          );
+      state = true;
+    } catch (e) {
+      state = false;
+      throw Exception('Failed to sign in with Google: $e');
+    }
   }
 
   Future<void> signUp(String email, String password, WidgetRef ref) async {
-    await _authService.signUp(email, password, ref);
-    final user = _authService.user;
-    ref.read(userProvider.notifier).setUser(
-          custom_user.User(
-            id: user.uid,
-            email: user.email!,
-            name: user.displayName!,
-            photoURL: user.photoURL!,
-          ),
-        );
-    state = true;
+    try {
+      await _authService.signUp(email, password, ref);
+      final user = _authService.user;
+      ref.read(userProvider.notifier).setUser(
+            custom_user.User(
+              id: user.uid,
+              email: user.email!,
+              name: user.displayName!,
+              photoURL: user.photoURL!,
+            ),
+          );
+      state = true;
+    } catch (e) {
+      state = false;
+      throw Exception('Failed to sign up: $e');
+    }
   }
 }

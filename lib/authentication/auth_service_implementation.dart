@@ -41,18 +41,19 @@ class AuthServiceImplementation implements AuthService {
               .collection('UserCollection')
               .doc(user.uid)
               .set({
-            'name': user.displayName,
+            'name': user.displayName ?? user.email,
             'email': user.email,
             'photoURL': user.photoURL,
             'pmi': pmi,
           });
-          // Initialize empty subcollections for contacts and conversations
+
           await _firebaseFirestore
               .collection('UserCollection')
               .doc(user.uid)
               .collection('contacts')
               .doc('dummy')
               .set({});
+
           await _firebaseFirestore
               .collection('UserCollection')
               .doc(user.uid)
@@ -60,7 +61,7 @@ class AuthServiceImplementation implements AuthService {
               .doc('dummy')
               .set({});
         }
-        // Set the user in the userProvider
+
         ref.read(userProvider.notifier).setUser(
               custom_user.User(
                 id: user.uid,
@@ -88,7 +89,6 @@ class AuthServiceImplementation implements AuthService {
           .signInWithEmailAndPassword(email: email, password: password);
       User? user = userCredential.user;
       if (user != null) {
-        // Set the user in the userProvider
         ref.read(userProvider.notifier).setUser(
               custom_user.User(
                 id: user.uid,
@@ -117,18 +117,19 @@ class AuthServiceImplementation implements AuthService {
               .collection('UserCollection')
               .doc(user.uid)
               .set({
-            'name': user.displayName,
+            'name': user.displayName ?? user.email,
             'email': user.email,
             'photoURL': user.photoURL,
             'pmi': pmi,
           });
-          // Initialize empty subcollections for contacts and conversations
+
           await _firebaseFirestore
               .collection('UserCollection')
               .doc(user.uid)
               .collection('contacts')
               .doc('dummy')
               .set({});
+
           await _firebaseFirestore
               .collection('UserCollection')
               .doc(user.uid)
@@ -136,7 +137,7 @@ class AuthServiceImplementation implements AuthService {
               .doc('dummy')
               .set({});
         }
-        // Set the user in the userProvider
+
         ref.read(userProvider.notifier).setUser(
               custom_user.User(
                 id: user.uid,
@@ -152,7 +153,6 @@ class AuthServiceImplementation implements AuthService {
   }
 
   String _generatePMI() {
-    return (Random().nextInt(90000000) + 10000000)
-        .toString(); // Generates an 8-digit PMI
+    return (Random().nextInt(90000000) + 10000000).toString();
   }
 }

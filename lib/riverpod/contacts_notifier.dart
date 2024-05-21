@@ -98,4 +98,8 @@ class ContactsNotifier extends StateNotifier<List<Contact>> {
         ? '$userId1-$userId2'
         : '$userId2-$userId1';
   }
+
+  void reset() {
+    state = [];
+  }
 }
