@@ -9,14 +9,14 @@ class MeetingServiceImplementation implements MeetingService {
   final JitsiMeet jitsiMeet = JitsiMeet();
 
   @override
-  void createMeeting(String roomName) async {
+  void createMeeting(String roomName, bool isAudioOn, bool isVideoOn) async {
     try {
       var options = JitsiMeetConferenceOptions(
         room: roomName,
         configOverrides: {
-          "startWithAudioMuted": true,
-          "startWithVideoMuted": true,
-          "enableNoAudioDetection:": true
+          "startWithAudioMuted": !isAudioOn,
+          "startWithVideoMuted": !isVideoOn,
+          "enableNoAudioDetection": true,
         },
         featureFlags: {
           "welcomepage.enabled": false,

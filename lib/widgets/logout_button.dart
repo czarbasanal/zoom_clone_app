@@ -22,7 +22,7 @@ class LogoutButton extends StatelessWidget {
             50,
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(16),
             side: const BorderSide(color: Color.fromRGBO(14, 114, 236, 1)),
           ),
         ),

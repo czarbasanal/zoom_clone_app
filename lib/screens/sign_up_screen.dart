@@ -21,7 +21,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   @override
   void initState() {
     super.initState();
-    // Initialize state or listeners here if needed.
   }
 
   @override

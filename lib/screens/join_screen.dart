@@ -1,19 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:zoom/authentication/auth_service_implementation.dart';
 import 'package:zoom/meetiings/meeting_service_implementation.dart';
+import 'package:zoom/riverpod/providers.dart';
 
-class JoinScreen extends StatefulWidget {
+class JoinScreen extends StatefulHookConsumerWidget {
   const JoinScreen({super.key});
 
   @override
   _JoinScreenState createState() => _JoinScreenState();
 }
 
-class _JoinScreenState extends State<JoinScreen> {
-  bool _isVideoOn = false;
-  bool _isAudioOn = false;
-
+class _JoinScreenState extends ConsumerState<JoinScreen> {
   final AuthServiceImplementation authServiceImplementation =
       AuthServiceImplementation();
   late final TextEditingController idController;
@@ -37,14 +36,19 @@ class _JoinScreenState extends State<JoinScreen> {
     super.dispose();
   }
 
-  joinMeeting() {
+  void joinMeeting() {
+    bool isVideoOn = ref.read(videoOnProvider);
+    bool isAudioOn = ref.read(audioOnProvider);
+
     meetingServiceImplementation.createMeeting(
-      idController.text,
-    );
+        idController.text.trim(), isAudioOn, isVideoOn);
   }
 
   @override
   Widget build(BuildContext context) {
+    final isVideoOn = ref.watch(videoOnProvider);
+    final isAudioOn = ref.watch(audioOnProvider);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 1.0,
@@ -167,6 +171,9 @@ class _JoinScreenState extends State<JoinScreen> {
                 ),
               ],
             ),
+            const SizedBox(
+              height: 15,
+            ),
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -182,13 +189,11 @@ class _JoinScreenState extends State<JoinScreen> {
               child: Column(
                 children: [
                   ListTile(
-                    title: const Text('Don\'t Connect To Audio'),
+                    title: const Text('Connect To Audio'),
                     trailing: CupertinoSwitch(
-                      value: _isAudioOn,
+                      value: isAudioOn,
                       onChanged: (bool value) {
-                        setState(() {
-                          _isAudioOn = value;
-                        });
+                        ref.read(audioOnProvider.notifier).state = value;
                       },
                       activeColor: CupertinoColors.activeGreen,
                     ),
@@ -200,15 +205,13 @@ class _JoinScreenState extends State<JoinScreen> {
                     color: Colors.grey.withOpacity(0.2),
                   ),
                   ListTile(
-                    title: const Text('Turn Off My Video'),
+                    title: const Text('Turn On My Video'),
                     subtitleTextStyle:
                         const TextStyle(color: Color(0xFF6E6E6E)),
                     trailing: CupertinoSwitch(
-                      value: _isVideoOn,
+                      value: isVideoOn,
                       onChanged: (bool value) {
-                        setState(() {
-                          _isVideoOn = value;
-                        });
+                        ref.read(videoOnProvider.notifier).state = value;
                       },
                       activeColor: CupertinoColors.activeGreen,
                     ),

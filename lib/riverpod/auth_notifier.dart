@@ -42,17 +42,32 @@ class AuthNotifier extends StateNotifier<bool> {
 
   Future<void> signIn(String email, String password, WidgetRef ref,
       BuildContext context) async {
-    await _authService.signIn(email, password, ref);
-    state = true;
+    try {
+      await _authService.signIn(email, password, ref);
+      state = true;
+    } catch (e) {
+      state = false;
+      throw Exception('Failed to sign in: $e');
+    }
   }
 
   Future<void> googleSignIn(BuildContext context, WidgetRef ref) async {
-    await _authService.signInWithGoogle(context, ref);
-    state = true;
+    try {
+      await _authService.signInWithGoogle(context, ref);
+      state = true;
+    } catch (e) {
+      state = false;
+      throw Exception('Failed to sign in with Google: $e');
+    }
   }
 
   Future<void> signUp(String email, String password, WidgetRef ref) async {
-    await _authService.signUp(email, password, ref);
-    state = true;
+    try {
+      await _authService.signUp(email, password, ref);
+      state = true;
+    } catch (e) {
+      state = false;
+      throw Exception('Failed to sign up: $e');
+    }
   }
 }

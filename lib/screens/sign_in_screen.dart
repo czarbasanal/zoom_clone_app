@@ -34,7 +34,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         title: const Text('Sign in',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(CupertinoIcons.chevron_left, size: 30),
@@ -46,7 +46,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: 20),
               buildEmailPasswordInput(),
@@ -54,7 +54,9 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               if (isLoading) const CircularProgressIndicator(),
               buildSignInButton(context),
               buildForgotPasswordButton(),
+              SizedBox(height: 20),
               buildOtherSignInMethodsLabel(),
+              SizedBox(height: 20),
               buildGoogleSignInButton(context),
             ],
           ),
@@ -113,50 +115,74 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     return FinalSignIn(
       text: 'Sign in',
       onPressed: () {
-        ref.read(loadingProvider.notifier).state = true;
-        ref
-            .read(authNotifierProvider.notifier)
-            .signIn(emailEditingController.text, passwordEditingController.text,
-                ref, context)
-            .then((_) {
-          ref.read(loadingProvider.notifier).state = false;
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const MainBottomNavigation()),
-            (Route<dynamic> route) => false,
-          );
-        }).catchError((e) {
-          ref.read(loadingProvider.notifier).state = false;
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text('Failed to sign in: $e')));
-        });
+        if (_validateInputs()) {
+          ref.read(loadingProvider.notifier).state = true;
+          ref
+              .read(authNotifierProvider.notifier)
+              .signIn(emailEditingController.text.trim(),
+                  passwordEditingController.text.trim(), ref, context)
+              .then((_) {
+            ref.read(loadingProvider.notifier).state = false;
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const MainBottomNavigation()),
+              (Route<dynamic> route) => false,
+            );
+          }).catchError((e) {
+            ref.read(loadingProvider.notifier).state = false;
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text('Failed to sign in: $e')));
+          });
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Please enter email and password')));
+        }
       },
     );
   }
 
+  bool _validateInputs() {
+    final email = emailEditingController.text.trim();
+    final password = passwordEditingController.text.trim();
+    if (email.isEmpty || password.isEmpty) {
+      return false;
+    }
+    return true;
+  }
+
   Widget buildForgotPasswordButton() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: TextButton(
-        onPressed: () {},
-        child: const Text('Forgot password?',
-            style: TextStyle(
-                color: Color(0xFF1072ED), fontWeight: FontWeight.bold)),
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: TextButton(
+            onPressed: () {},
+            child: const Text('Forgot password?',
+                style: TextStyle(
+                    color: Color(0xFF1072ED), fontWeight: FontWeight.w500)),
+          ),
+        ),
+      ],
     );
   }
 
   Widget buildOtherSignInMethodsLabel() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Text(
-        'OTHER SIGN IN METHODS',
-        style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.normal,
-            color: Color(0xFF6E6E6E)),
-      ),
+    return const Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            'OTHER SIGN IN METHODS',
+            style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+                color: Color(0xFF6E6E6E)),
+          ),
+        ),
+      ],
     );
   }
 

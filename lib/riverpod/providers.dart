@@ -41,3 +41,5 @@ final authStateProvider = StreamProvider((ref) {
 });
 
 final loadingProvider = StateProvider<bool>((ref) => false);
+final videoOnProvider = StateProvider<bool>((ref) => false);
+final audioOnProvider = StateProvider<bool>((ref) => false);

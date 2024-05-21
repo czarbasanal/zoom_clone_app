@@ -41,7 +41,7 @@ class AuthServiceImplementation implements AuthService {
               .collection('UserCollection')
               .doc(user.uid)
               .set({
-            'name': user.displayName,
+            'name': user.displayName ?? user.email,
             'email': user.email,
             'photoURL': user.photoURL,
             'pmi': pmi,
@@ -116,7 +116,7 @@ class AuthServiceImplementation implements AuthService {
               .collection('UserCollection')
               .doc(user.uid)
               .set({
-            'name': user.displayName,
+            'name': user.displayName ?? user.email,
             'email': user.email,
             'photoURL': user.photoURL,
             'pmi': pmi,
@@ -151,7 +151,6 @@ class AuthServiceImplementation implements AuthService {
   }
 
   String _generatePMI() {
-    return (Random().nextInt(90000000) + 10000000)
-        .toString(); // Generates an 8-digit PMI
+    return (Random().nextInt(90000000) + 10000000).toString();
   }
 }
