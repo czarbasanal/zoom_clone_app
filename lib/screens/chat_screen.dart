@@ -6,6 +6,7 @@ import '../riverpod/providers.dart';
 
 class ChatScreen extends ConsumerWidget {
   final Contact contact;
+  final TextEditingController _messageController = TextEditingController();
 
   ChatScreen({required this.contact});
 
@@ -40,16 +41,18 @@ class ChatScreen extends ConsumerWidget {
               children: [
                 Expanded(
                   child: TextField(
-                    controller: TextEditingController(),
+                    controller: _messageController,
                     decoration: InputDecoration(
                       hintText: 'Enter message',
                       border: OutlineInputBorder(),
                     ),
                     onSubmitted: (text) {
                       if (text.isNotEmpty) {
+                        print("MESSAGE SENT " + text);
                         ref
                             .read(messagesProvider(contact.id).notifier)
                             .sendMessage(text);
+                        _messageController.clear();
                       }
                     },
                   ),
@@ -57,11 +60,13 @@ class ChatScreen extends ConsumerWidget {
                 IconButton(
                   icon: Icon(Icons.send),
                   onPressed: () {
-                    final text = TextEditingController().text;
+                    final text = _messageController.text;
                     if (text.isNotEmpty) {
+                      print("MESSAGE SENT " + text);
                       ref
                           .read(messagesProvider(contact.id).notifier)
                           .sendMessage(text);
+                      _messageController.clear();
                     }
                   },
                 ),

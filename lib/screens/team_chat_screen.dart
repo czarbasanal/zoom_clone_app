@@ -12,10 +12,15 @@ class TeamChatScreen extends ConsumerWidget {
     final user = ref.watch(userProvider);
     final contacts = ref.watch(contactsProvider);
 
-    // Load contacts only if the user is available
-    if (user != null) {
-      ref.read(contactsProvider.notifier).loadContacts();
+    if (user == null) {
+      print('No user logged in');
+      return Center(child: Text('No user logged in'));
+    } else {
+      print('User ID found: ${user.id}');
     }
+
+    // Load contacts only if the user is available
+    ref.read(contactsProvider.notifier).loadContacts();
 
     return Scaffold(
       appBar: AppBar(
@@ -129,13 +134,6 @@ class TeamChatScreen extends ConsumerWidget {
             ),
             SizedBox(
               height: 20,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Text("Find People and start chatting!"),
-            SizedBox(
-              height: 30,
             ),
             Center(
               child: CupertinoButton(

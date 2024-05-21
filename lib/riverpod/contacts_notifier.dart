@@ -6,38 +6,42 @@ import 'providers.dart';
 class ContactsNotifier extends StateNotifier<List<Contact>> {
   final Ref ref;
 
-  ContactsNotifier(this.ref) : super([]) {
-    loadContacts();
-  }
+  ContactsNotifier(this.ref) : super([]);
 
   Future<void> loadContacts() async {
-    final userId = ref.read(userProvider)?.id;
-    if (userId != null) {
-      final snapshot = await FirebaseFirestore.instance
+    final user = ref.read(userProvider);
+    if (user != null) {
+      final querySnapshot = await FirebaseFirestore.instance
           .collection('UserCollection')
-          .doc(userId)
+          .doc(user.id)
           .collection('contacts')
           .get();
-      state = snapshot.docs
-          .map((doc) => Contact.fromMap(doc.id, doc.data()))
-          .toList();
-      print('Loaded contacts: ${state.length}');
+
+      final contacts = querySnapshot.docs.map((doc) {
+        return Contact.fromMap(doc.id, doc.data());
+      }).toList();
+
+      state = contacts;
+      // print('Loaded contacts: ${contacts.length}');
     } else {
       print('No user ID found');
     }
   }
 
   Future<void> addContact(Contact contact) async {
-    final userId = ref.read(userProvider)?.id;
-    if (userId != null) {
-      final docRef = FirebaseFirestore.instance
+    final user = ref.read(userProvider);
+    if (user != null) {
+      await FirebaseFirestore.instance
           .collection('UserCollection')
-          .doc(userId)
+          .doc(user.id)
           .collection('contacts')
-          .doc(contact.id);
-      await docRef.set(contact.toMap());
+          .doc(contact.id)
+          .set(contact.toMap());
+
       state = [...state, contact];
       print('Contact added: ${contact.email}');
+    } else {
+      print('No user ID found');
     }
   }
 }
