@@ -10,195 +10,207 @@ class TeamChatScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider);
-    final contacts = ref.watch(contactsProvider);
+    final contactsStream = ref.watch(contactsStreamProvider);
 
-    // Load contacts only if the user is available
-    if (user != null) {
-      ref.read(contactsProvider.notifier).loadContacts();
+    if (user == null) {
+      print('No user logged in');
+      return Center(child: Text('No user logged in'));
+    } else {
+      print('User ID found: ${user.id}');
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text('Team Chat',
-            style: TextStyle(
-                fontSize: 18.0,
-                color: Colors.white,
-                fontWeight: FontWeight.w500)),
-        centerTitle: true,
-        backgroundColor: const Color(0xFF37384C),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(CupertinoIcons.add, color: Colors.white, size: 24),
-            onPressed: () {},
+    return contactsStream.when(
+      data: (_) {
+        final contacts = ref.watch(contactsProvider);
+
+        return Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: const Text('Team Chat',
+                style: TextStyle(
+                    fontSize: 18.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500)),
+            centerTitle: true,
+            backgroundColor: const Color(0xFF37384C),
+            actions: <Widget>[
+              IconButton(
+                icon: const Icon(CupertinoIcons.add,
+                    color: Colors.white, size: 24),
+                onPressed: () {},
+              ),
+            ],
           ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 15, 20, 20),
-              child: CupertinoTextField(
-                placeholder: 'Search',
-                placeholderStyle: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  color: Color(0xFF6E6E6E),
-                ),
-                prefix: Padding(
-                  padding: const EdgeInsets.fromLTRB(9.0, 6.0, 1.0, 6.0),
-                  child: Icon(
-                    CupertinoIcons.search,
-                    color: Color(0xFF6e7681),
+          body: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 15, 20, 20),
+                  child: CupertinoTextField(
+                    placeholder: 'Search',
+                    placeholderStyle: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Color(0xFF6E6E6E),
+                    ),
+                    prefix: Padding(
+                      padding: const EdgeInsets.fromLTRB(9.0, 6.0, 1.0, 6.0),
+                      child: Icon(
+                        CupertinoIcons.search,
+                        color: Color(0xFF6e7681),
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      color: Color(0xFFE0DEE8),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
                   ),
                 ),
-                decoration: BoxDecoration(
-                  color: Color(0xFFE0DEE8),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-            ),
-            Container(
-              height: 120.0,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: <Widget>[
-                  CupertinoIconButton(
-                      icon: CupertinoIcons.star_fill, label: 'Starred'),
-                  CupertinoIconButton(
-                      icon: CupertinoIcons.folder_fill, label: 'Folders'),
-                  CupertinoIconButton(
-                      icon: CupertinoIcons.at, label: 'Mentions'),
-                  CupertinoIconButton(
-                      icon: CupertinoIcons.arrow_up_right_square_fill,
-                      label: 'Drafts & S...'),
-                  CupertinoIconButton(
-                      icon: CupertinoIcons.bookmark_fill, label: 'Bookmarks'),
-                  CupertinoIconButton(
-                      icon: CupertinoIcons.news_solid, label: 'Files'),
-                  CupertinoIconButton(
-                      icon: CupertinoIcons.alarm_fill, label: 'Reminders'),
-                  CupertinoIconButton(
-                      icon: CupertinoIcons.person_add_solid,
-                      label: 'Contact R...'),
-                  CupertinoIconButton(
-                      icon: CupertinoIcons.gear_solid, label: 'Customize'),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                      "Messages"),
-                  IconButton(
-                    onPressed: () => showCupertinoModalPopup(
-                        context: context, builder: createCupertinoActionSheet),
-                    icon: Icon(CupertinoIcons.line_horizontal_3_decrease),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              height: 300, // Adjust the height as needed
-              child: contacts.isEmpty
-                  ? Center(child: Text('No contacts found'))
-                  : ListView.builder(
-                      itemCount: contacts.length,
-                      itemBuilder: (context, index) {
-                        final contact = contacts[index];
-                        return ListTile(
-                          title: Text(contact.name),
-                          subtitle: Text(contact.email),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    ChatScreen(contact: contact),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Text("Find People and start chatting!"),
-            SizedBox(
-              height: 30,
-            ),
-            Center(
-              child: CupertinoButton(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(CupertinoIcons.create, color: CupertinoColors.white),
-                      SizedBox(width: 10),
-                      Text(
-                        'Add Contacts',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: CupertinoColors.white,
-                        ),
-                      ),
+                Container(
+                  height: 120.0,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: <Widget>[
+                      CupertinoIconButton(
+                          icon: CupertinoIcons.star_fill, label: 'Starred'),
+                      CupertinoIconButton(
+                          icon: CupertinoIcons.folder_fill, label: 'Folders'),
+                      CupertinoIconButton(
+                          icon: CupertinoIcons.at, label: 'Mentions'),
+                      CupertinoIconButton(
+                          icon: CupertinoIcons.arrow_up_right_square_fill,
+                          label: 'Drafts & S...'),
+                      CupertinoIconButton(
+                          icon: CupertinoIcons.bookmark_fill,
+                          label: 'Bookmarks'),
+                      CupertinoIconButton(
+                          icon: CupertinoIcons.news_solid, label: 'Files'),
+                      CupertinoIconButton(
+                          icon: CupertinoIcons.alarm_fill, label: 'Reminders'),
+                      CupertinoIconButton(
+                          icon: CupertinoIcons.person_add_solid,
+                          label: 'Contact R...'),
+                      CupertinoIconButton(
+                          icon: CupertinoIcons.gear_solid, label: 'Customize'),
                     ],
                   ),
-                  color: CupertinoColors.activeBlue,
-                  onPressed: () {
-                    showCupertinoDialog(
-                        context: context,
-                        builder: (context) => CupertinoAlertDialog(
-                              title: Text("Add Contacts"),
-                              content: Column(
-                                children: <Widget>[
-                                  SizedBox(height: 16),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                AddContactScreen()),
-                                      );
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          "By email address",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            color: CupertinoColors.activeBlue,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                          "Messages"),
+                      IconButton(
+                        onPressed: () => showCupertinoModalPopup(
+                            context: context,
+                            builder: createCupertinoActionSheet),
+                        icon: Icon(CupertinoIcons.line_horizontal_3_decrease),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 300, // Adjust the height as needed
+                  child: contacts.isEmpty
+                      ? Center(child: Text('No contacts found'))
+                      : ListView.builder(
+                          itemCount: contacts.length,
+                          itemBuilder: (context, index) {
+                            final contact = contacts[index];
+                            return ListTile(
+                              leading: CircleAvatar(
+                                backgroundImage: NetworkImage(contact.photoURL),
                               ),
-                              actions: <Widget>[
-                                CupertinoDialogAction(
-                                  child: Text('Cancel'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            ));
-                  }),
-            )
-          ],
-        ),
-      ),
+                              title: Text(contact.name),
+                              subtitle: Text(contact.email),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ChatScreen(contact: contact),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: CupertinoButton(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(CupertinoIcons.create,
+                              color: CupertinoColors.white),
+                          SizedBox(width: 10),
+                          Text(
+                            'Add Contacts',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: CupertinoColors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      color: CupertinoColors.activeBlue,
+                      onPressed: () {
+                        showCupertinoDialog(
+                            context: context,
+                            builder: (context) => CupertinoAlertDialog(
+                                  title: Text("Add Contacts"),
+                                  content: Column(
+                                    children: <Widget>[
+                                      SizedBox(height: 16),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AddContactScreen()),
+                                          );
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              "By email address",
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                color:
+                                                    CupertinoColors.activeBlue,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  actions: <CupertinoDialogAction>[
+                                    CupertinoDialogAction(
+                                      child: Text('Cancel'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                ));
+                      }),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stackTrace) =>
+          Center(child: Text('Error loading contacts')),
     );
   }
 

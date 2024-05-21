@@ -29,8 +29,23 @@ class AuthNotifier extends StateNotifier<bool> {
 
   Stream<firebase_auth.User?> get authStateChange => _authService.userState;
 
+  Future<void> signInWithGoogle(BuildContext context, WidgetRef ref) async {
+    await _authService.signInWithGoogle(context, ref);
+    final user = _authService.user;
+    ref.read(userProvider.notifier).setUser(
+          custom_user.User(
+            id: user.uid,
+            email: user.email!,
+            name: user.displayName!,
+            photoURL: user.photoURL!,
+          ),
+        );
+    state = true;
+  }
+
   Future<void> signOut(WidgetRef ref) async {
     await _authService.logOut(ref);
+    ref.read(userProvider.notifier).clearUser();
     state = false;
     ref.invalidate(userProvider);
     ref.invalidate(userProvider);
@@ -40,10 +55,18 @@ class AuthNotifier extends StateNotifier<bool> {
     ref.read(conversationsProvider.notifier).reset();
   }
 
-  Future<void> signIn(String email, String password, WidgetRef ref,
-      BuildContext context) async {
+  Future<void> signIn(String email, String password, WidgetRef ref) async {
     try {
       await _authService.signIn(email, password, ref);
+      final user = _authService.user;
+      ref.read(userProvider.notifier).setUser(
+            custom_user.User(
+              id: user.uid,
+              email: user.email!,
+              name: user.displayName!,
+              photoURL: user.photoURL!,
+            ),
+          );
       state = true;
     } catch (e) {
       state = false;
@@ -54,6 +77,15 @@ class AuthNotifier extends StateNotifier<bool> {
   Future<void> googleSignIn(BuildContext context, WidgetRef ref) async {
     try {
       await _authService.signInWithGoogle(context, ref);
+      final user = _authService.user;
+      ref.read(userProvider.notifier).setUser(
+            custom_user.User(
+              id: user.uid,
+              email: user.email!,
+              name: user.displayName!,
+              photoURL: user.photoURL!,
+            ),
+          );
       state = true;
     } catch (e) {
       state = false;
@@ -64,6 +96,15 @@ class AuthNotifier extends StateNotifier<bool> {
   Future<void> signUp(String email, String password, WidgetRef ref) async {
     try {
       await _authService.signUp(email, password, ref);
+      final user = _authService.user;
+      ref.read(userProvider.notifier).setUser(
+            custom_user.User(
+              id: user.uid,
+              email: user.email!,
+              name: user.displayName!,
+              photoURL: user.photoURL!,
+            ),
+          );
       state = true;
     } catch (e) {
       state = false;

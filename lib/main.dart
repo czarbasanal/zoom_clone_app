@@ -13,6 +13,7 @@ import 'screens/meetings_screen.dart';
 import 'screens/new_meeting_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import '../models/user.dart' as custom_user;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +40,17 @@ class MyApp extends ConsumerWidget {
       home: authenticationState.when(
         data: (data) {
           if (data != null) {
+            // Delay setting the user state
+            Future.microtask(() {
+              ref.read(userProvider.notifier).setUser(
+                    custom_user.User(
+                      id: data.uid,
+                      email: data.email!,
+                      name: data.displayName!,
+                      photoURL: data.photoURL!,
+                    ),
+                  );
+            });
             return const MainBottomNavigation();
           }
           return const LoginScreen();
