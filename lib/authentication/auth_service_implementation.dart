@@ -46,7 +46,7 @@ class AuthServiceImplementation implements AuthService {
             'photoURL': user.photoURL,
             'pmi': pmi,
           });
-
+          // Initialize empty subcollections for contacts and conversations
           await _firebaseFirestore
               .collection('UserCollection')
               .doc(user.uid)
@@ -60,7 +60,7 @@ class AuthServiceImplementation implements AuthService {
               .doc('dummy')
               .set({});
         }
-
+        // Set the user in the userProvider
         ref.read(userProvider.notifier).setUser(
               custom_user.User(
                 id: user.uid,
@@ -82,40 +82,23 @@ class AuthServiceImplementation implements AuthService {
   }
 
   @override
-  Future<void> signIn(String email, String password, WidgetRef ref,
-      BuildContext context) async {
+  Future<void> signIn(String email, String password, WidgetRef ref) async {
     try {
       UserCredential userCredential = await _firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
       User? user = userCredential.user;
-
       if (user != null) {
-        bool isNewUser = userCredential.additionalUserInfo?.isNewUser ?? false;
-
-        if (isNewUser) {
-          String pmi = _generatePMI();
-          await _firebaseFirestore
-              .collection('UserCollection')
-              .doc(user.uid)
-              .set({
-            'name': user.displayName ?? email,
-            'email': user.email,
-            'photoURL': user.photoURL ?? "",
-            'pmi': pmi,
-          });
-        }
-
         ref.read(userProvider.notifier).setUser(
               custom_user.User(
                 id: user.uid,
                 email: user.email!,
-                name: user.displayName ?? email,
-                photoURL: user.photoURL ?? "",
+                name: user.displayName!,
+                photoURL: user.photoURL!,
               ),
             );
       }
     } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message!);
+      e.message.toString();
     }
   }
 
@@ -138,6 +121,7 @@ class AuthServiceImplementation implements AuthService {
             'photoURL': user.photoURL,
             'pmi': pmi,
           });
+          // Initialize empty subcollections for contacts and conversations
           await _firebaseFirestore
               .collection('UserCollection')
               .doc(user.uid)
@@ -151,7 +135,7 @@ class AuthServiceImplementation implements AuthService {
               .doc('dummy')
               .set({});
         }
-
+        // Set the user in the userProvider
         ref.read(userProvider.notifier).setUser(
               custom_user.User(
                 id: user.uid,
@@ -167,6 +151,7 @@ class AuthServiceImplementation implements AuthService {
   }
 
   String _generatePMI() {
-    return (Random().nextInt(90000000) + 10000000).toString();
+    return (Random().nextInt(90000000) + 10000000)
+        .toString(); // Generates an 8-digit PMI
   }
 }

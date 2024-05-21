@@ -42,7 +42,7 @@ class AuthNotifier extends StateNotifier<bool> {
 
   Future<void> signIn(String email, String password, WidgetRef ref,
       BuildContext context) async {
-    await _authService.signIn(email, password, ref, context);
+    await _authService.signIn(email, password, ref);
     state = true;
   }
 
