@@ -17,6 +17,7 @@ dependencies:
   google_sign_in: ^6.2.1
   hooks_riverpod: ^2.5.1
   jitsi_meet_flutter_sdk: ^0.4.2
+  flutter_riverpod: ^2.5.1
 
 dev_dependencies:
   flutter_test:

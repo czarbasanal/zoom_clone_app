@@ -5,14 +5,14 @@ import 'package:zoom/riverpod/providers.dart';
 import 'package:zoom/widgets/final_sign_up.dart';
 import 'package:zoom/widgets/google_button.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignUpScreen extends StatefulHookConsumerWidget {
   const SignUpScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   final TextEditingController emailEditingController = TextEditingController();
   final TextEditingController passwordEditingController =
       TextEditingController();
@@ -22,8 +22,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   void initState() {
     super.initState();
-    emailEditingController;
-    passwordEditingController;
+    emailEditingController.addListener(_validateForm);
+    passwordEditingController.addListener(_validateForm);
   }
 
   void _validateForm() {
@@ -38,15 +38,45 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   void dispose() {
+    emailEditingController.removeListener(_validateForm);
+    passwordEditingController.removeListener(_validateForm);
     emailEditingController.dispose();
     passwordEditingController.dispose();
     super.dispose();
   }
 
+  void _handleSignUp() {
+    if (_isButtonEnabled) {
+      _signUp(context, ref);
+    }
+  }
+
+  void _signUp(BuildContext context, WidgetRef ref) async {
+    setState(() {
+      _isLoading = true;
+    });
+    final signUpState = ref.read(authNotifierProvider.notifier);
+    try {
+      await signUpState.signUp(
+        emailEditingController.text,
+        passwordEditingController.text,
+        ref,
+      );
+      Navigator.pushNamed(context, '/sign_in');
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to sign up: $e')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, child) {
-      final signUpState = ref.watch(authNotifierProvider.notifier);
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -135,28 +165,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     const SizedBox(height: 20),
                     Center(
                       child: FinalSignUp(
-                          text: 'Continue',
-                          onPressed: () async {
-                            setState(() {
-                              _isLoading = true;
-                            });
-                            try {
-                              await signUpState.signUp(
-                                emailEditingController.text,
-                                passwordEditingController.text,
-                              );
-                              Navigator.pushNamed(context, '/sign_in');
-                            } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                    content: Text('Failed to sign up: $e')),
-                              );
-                            } finally {
-                              setState(() {
-                                _isLoading = false;
-                              });
-                            }
-                          }),
+                        text: 'Continue',
+                        onPressed: _handleSignUp,
+                      ),
                     ),
                     const SizedBox(height: 20),
                     const Padding(
@@ -190,8 +201,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             _isLoading = true;
                           });
 
+                          final signUpState =
+                              ref.read(authNotifierProvider.notifier);
+
                           try {
-                            await signUpState.googleSignIn(context);
+                            await signUpState.googleSignIn(context, ref);
                             Navigator.pushNamed(context, '/meetings');
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(

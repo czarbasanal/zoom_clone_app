@@ -1,31 +1,32 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zoom/authentication/auth_service_implementation.dart';
 import 'package:zoom/screens/meetings_screen.dart';
 import 'package:zoom/screens/team_chat_screen.dart';
 import 'package:zoom/widgets/logout_button.dart';
 
-class MainBottomNavigation extends StatefulWidget {
+class MainBottomNavigation extends ConsumerStatefulWidget {
   const MainBottomNavigation({super.key});
 
   @override
-  State<MainBottomNavigation> createState() => _MainBottomNavigationState();
+  _MainBottomNavigationState createState() => _MainBottomNavigationState();
 }
 
-class _MainBottomNavigationState extends State<MainBottomNavigation> {
+class _MainBottomNavigationState extends ConsumerState<MainBottomNavigation> {
   late int selectedIndex = 0;
-
-  final List<Widget> pages = [
-    const MeetingScreen(),
-    TeamChatScreen(),
-    const Text('This is a Mail Screen'),
-    const Text('This is a Calendar Screen'),
-    LogoutButton(
-        text: 'Logout', onPressed: () => AuthServiceImplementation().logOut())
-  ];
 
   @override
   Widget build(BuildContext context) {
+    final authService = AuthServiceImplementation();
+    final List<Widget> pages = [
+      const MeetingScreen(),
+      TeamChatScreen(),
+      const Text('This is a Mail Screen'),
+      const Text('This is a Calendar Screen'),
+      LogoutButton(text: 'Logout', onPressed: () => authService.logOut(ref))
+    ];
+
     return Scaffold(
         body: Center(child: pages[selectedIndex]),
         bottomNavigationBar: BottomNavigationBar(

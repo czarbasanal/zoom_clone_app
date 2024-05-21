@@ -1,38 +1,56 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:zoom/authentication/auth_service_implementation.dart';
+import '../models/user.dart' as custom_user;
+import '../authentication/auth_service_implementation.dart';
+
+class UserNotifier extends StateNotifier<custom_user.User?> {
+  UserNotifier() : super(null);
+
+  void setUser(custom_user.User user) {
+    state = user;
+    print('User set: ${user.email}');
+  }
+
+  void clearUser() {
+    state = null;
+    print('User cleared');
+  }
+
+  // Stream to get the authentication state changes
+  Stream<firebase_auth.User?> get authStateChange =>
+      AuthServiceImplementation().userState;
+}
 
 class AuthNotifier extends StateNotifier<bool> {
-  final AuthServiceImplementation _authServiceImplementation;
+  final AuthServiceImplementation _authService;
 
-  AuthNotifier(
-    this._authServiceImplementation,
-  ) : super(false);
+  AuthNotifier(this._authService) : super(false);
 
-  Stream<User?> get authStateChange => _authServiceImplementation.userState;
+  Stream<firebase_auth.User?> get authStateChange => _authService.userState;
 
-  Future<void> googleSignIn(BuildContext context) async {
-    state = false;
-    await _authServiceImplementation.signInWithGoogle(context);
+  Future<void> signInWithGoogle(BuildContext context, WidgetRef ref) async {
+    await _authService.signInWithGoogle(context, ref);
     state = true;
   }
 
-  Future<void> logOut() async {
+  Future<void> signOut(WidgetRef ref) async {
+    await _authService.logOut(ref);
     state = false;
-    await _authServiceImplementation.logOut();
+  }
+
+  Future<void> signIn(String email, String password, WidgetRef ref) async {
+    await _authService.signIn(email, password, ref);
     state = true;
   }
 
-  Future<void> signIn(String email, String password) async {
-    state = false;
-    await _authServiceImplementation.signIn(email, password);
+  Future<void> googleSignIn(BuildContext context, WidgetRef ref) async {
+    await _authService.signInWithGoogle(context, ref);
     state = true;
   }
 
-  Future<void> signUp(String email, String password) async {
-    state = false;
-    await _authServiceImplementation.signUp(email, password);
+  Future<void> signUp(String email, String password, WidgetRef ref) async {
+    await _authService.signUp(email, password, ref);
     state = true;
   }
 }

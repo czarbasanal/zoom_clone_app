@@ -120,7 +120,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     text: 'Sign in',
                     onPressed: () async {
                       await signInState.signIn(emailEditingController.text,
-                          passwordEditingController.text);
+                          passwordEditingController.text, ref);
                       Navigator.pushNamed(context, '/meetings');
                     },
                   ),
@@ -157,7 +157,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     });
 
                     try {
-                      await signInState.googleSignIn(context);
+                      await signInState.googleSignIn(context, ref);
                       Navigator.pushNamed(context, '/meetings');
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(

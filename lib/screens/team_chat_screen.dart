@@ -1,11 +1,22 @@
-// ignore_for_file: prefer_const_constructors, sort_child_properties_last, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zoom/screens/add_contact_screen.dart';
+import '../models/contact.dart';
+import '../riverpod/providers.dart';
+import 'chat_screen.dart';
 
-class TeamChatScreen extends StatelessWidget {
+class TeamChatScreen extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider);
+    final contacts = ref.watch(contactsProvider);
+
+    // Load contacts only if the user is available
+    if (user != null) {
+      ref.read(contactsProvider.notifier).loadContacts();
+    }
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -42,7 +53,7 @@ class TeamChatScreen extends StatelessWidget {
                   ),
                 ),
                 decoration: BoxDecoration(
-                  color: Color(0xFFf1f0f5),
+                  color: Color(0xFFE0DEE8),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
@@ -93,23 +104,32 @@ class TeamChatScreen extends StatelessWidget {
               ),
             ),
             Container(
-              height: 50,
-              child: ListView(
-                children: <Widget>[
-                  ListTile(
-                    title: Text('Mexl Delver Tuba (you)'),
-                    leading: CircleAvatar(
-                      backgroundImage: AssetImage("assets/Zoom.png"),
+              height: 300, // Adjust the height as needed
+              child: contacts.isEmpty
+                  ? Center(child: Text('No contacts found'))
+                  : ListView.builder(
+                      itemCount: contacts.length,
+                      itemBuilder: (context, index) {
+                        final contact = contacts[index];
+                        return ListTile(
+                          title: Text(contact.name),
+                          subtitle: Text(contact.email),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ChatScreen(contact: contact),
+                              ),
+                            );
+                          },
+                        );
+                      },
                     ),
-                    onTap: () {},
-                  ),
-                ],
-              ),
             ),
             SizedBox(
               height: 20,
             ),
-            Image.asset(width: 200, height: 200, "assets/startChatting2.png"),
             SizedBox(
               height: 20,
             ),
@@ -144,29 +164,17 @@ class TeamChatScreen extends StatelessWidget {
                                   SizedBox(height: 16),
                                   GestureDetector(
                                     onTap: () {
-                                      Navigator.of(context).pop();
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                AddContactScreen()),
+                                      );
                                     },
                                     child: Row(
                                       children: [
                                         Text(
                                           "By email address",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            color: CupertinoColors.activeBlue,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(height: 25),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          "From phone contacts",
                                           style: TextStyle(
                                             fontSize: 20,
                                             color: CupertinoColors.activeBlue,
@@ -205,7 +213,7 @@ class TeamChatScreen extends StatelessWidget {
             height: 60,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Color(0xFFf1f0f5),
+              color: Color(0xFFE0DEE8),
             ),
             child: Icon(
               icon,
