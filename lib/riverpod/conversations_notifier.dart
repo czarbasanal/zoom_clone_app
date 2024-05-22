@@ -8,17 +8,19 @@ class ConversationsNotifier extends StateNotifier<List<Conversation>> {
 
   ConversationsNotifier(this.ref) : super([]);
 
-  Future<void> loadConversations() async {
+  void loadConversations() async {
     final userId = ref.read(userProvider)?.id;
     if (userId != null) {
-      final snapshot = await FirebaseFirestore.instance
+      FirebaseFirestore.instance
           .collection('UserCollection')
           .doc(userId)
           .collection('conversations')
-          .get();
-      state = snapshot.docs
-          .map((doc) => Conversation.fromMap(doc.id, doc.data()))
-          .toList();
+          .snapshots()
+          .listen((snapshot) {
+        state = snapshot.docs
+            .map((doc) => Conversation.fromMap(doc.id, doc.data()))
+            .toList();
+      });
     }
   }
 

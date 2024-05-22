@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/contact.dart';
 import '../riverpod/providers.dart';
 
 class AddContactScreen extends ConsumerWidget {

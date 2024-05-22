@@ -6,40 +6,61 @@ import '../models/message.dart';
 class MessagesNotifier extends StateNotifier<List<Message>> {
   final Ref ref;
   final String conversationId;
+  late final Stream<List<Message>> messagesStream;
 
-  MessagesNotifier(this.ref, this.conversationId) : super([]);
+  MessagesNotifier(this.ref, this.conversationId) : super([]) {
+    _loadMessages();
+    messagesStream = _initializeMessagesStream();
+  }
 
-  Stream<void> loadMessages() {
+  Stream<List<Message>> _initializeMessagesStream() {
     final user = ref.read(userProvider);
+    if (user == null) {
+      print('User not found');
+      return Stream.value([]);
+    }
 
     return FirebaseFirestore.instance
         .collection('UserCollection')
+        .doc(user.id)
+        .collection('conversations')
+        .doc(conversationId)
+        .collection('messages')
+        .orderBy('timestamp')
         .snapshots()
-        .asyncMap((userSnapshot) async {
-      final allMessages = <Message>[];
+        .map((snapshot) {
+      final messages = snapshot.docs.map((doc) {
+        return Message.fromMap(doc.id, doc.data());
+      }).toList();
 
-      for (var userDoc in userSnapshot.docs) {
-        final userId = userDoc.id;
-        final messagesSnapshot = await FirebaseFirestore.instance
-            .collection('UserCollection')
-            .doc(userId)
-            .collection('conversations')
-            .doc(conversationId)
-            .collection('messages')
-            .orderBy('timestamp')
-            .get();
+      state = messages;
+      print('Messages updated: ${messages.length}');
+      return messages;
+    });
+  }
 
-        final messages = messagesSnapshot.docs.map((doc) {
+  Stream<List<Message>> _loadMessages() {
+    final user = ref.read(userProvider);
+    if (user != null) {
+      return FirebaseFirestore.instance
+          .collection('UserCollection')
+          .doc(user.id)
+          .collection('conversations')
+          .doc(conversationId)
+          .collection('messages')
+          .orderBy('timestamp')
+          .snapshots()
+          .map((snapshot) {
+        final messages = snapshot.docs.map((doc) {
           return Message.fromMap(doc.id, doc.data());
         }).toList();
-
-        allMessages.addAll(messages);
-      }
-
-      allMessages.sort((a, b) => a.timestamp.compareTo(b.timestamp));
-      state = allMessages;
-      print('Loaded messages: ${allMessages.length}');
-    });
+        state = messages; // Update state on each change.
+        return messages;
+      });
+    } else {
+      // Optionally handle the case where the user is not found.
+      return Stream.value([]);
+    }
   }
 
   Future<void> sendMessage(String text) async {
@@ -54,25 +75,14 @@ class MessagesNotifier extends StateNotifier<List<Message>> {
         timestamp: DateTime.now(),
       );
 
-      final batch = FirebaseFirestore.instance.batch();
-
-      final userCollectionSnapshot =
-          await FirebaseFirestore.instance.collection('UserCollection').get();
-
-      for (var userDoc in userCollectionSnapshot.docs) {
-        final userId = userDoc.id;
-        final messageRef = FirebaseFirestore.instance
-            .collection('UserCollection')
-            .doc(userId)
-            .collection('conversations')
-            .doc(conversationId)
-            .collection('messages')
-            .doc(messageId);
-
-        batch.set(messageRef, message.toMap());
-      }
-
-      await batch.commit();
+      await FirebaseFirestore.instance
+          .collection('UserCollection')
+          .doc(user.id)
+          .collection('conversations')
+          .doc(conversationId)
+          .collection('messages')
+          .doc(messageId)
+          .set(message.toMap());
 
       print('Message sent: $text');
     } else {
